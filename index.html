@@ -1,59 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-<meta charset="utf-8">
-<title>EXIALSA</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXIALSA | Soluciones comerciales</title>
 
 <style>
-body{
-font-family:Arial;
-margin:40px;
-background:#f4f4f4
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1a1a1a;
 }
 
-h1{
-color:#0f3d5e
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
 }
 
-.card{
-background:white;
-padding:20px;
-margin:15px 0;
-border-radius:8px;
-box-shadow:0 2px 6px rgba(0,0,0,0.1)
+header {
+  background: white;
+  border-bottom: 1px solid #ddd;
 }
 
-a{
-color:#0f3d5e;
-text-decoration:none;
-font-weight:bold
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 {
+  color: #0b3d91;
+}
+
+.hero {
+  background: #0b3d91;
+  color: white;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.btn {
+  display: inline-block;
+  background: #ff6b00;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-top: 15px;
+}
+
+.section {
+  padding: 50px 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.footer {
+  background: #0b3d91;
+  color: white;
+  text-align: center;
+  padding: 20px;
 }
 </style>
 
 </head>
-
 <body>
 
-<h1>EXIALSA</h1>
-<p>Servicios comerciales</p>
+<header>
+  <div class="container">
+    <h1>EXIALSA</h1>
+  </div>
+</header>
 
-<div class="card">
-<h2>Extintores</h2>
-<p>Venta, recarga e inspección de extintores.</p>
-<a href="https://extintores.exialsa.com">Ver servicios</a>
-</div>
+<section class="hero">
+  <h2>Soluciones comerciales bajo cotización</h2>
+  <p>Extintores, alcoholes y llantas para empresas y negocios.</p>
+  <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
+</section>
 
-<div class="card">
-<h2>Alcoholes</h2>
-<p>Venta y distribución.</p>
-<a href="https://alcoholes.exialsa.com">Ver productos</a>
-</div>
+<section class="section container">
+  <h2>Servicios</h2>
+  <div class="cards">
 
-<div class="card">
-<h2>Llantas</h2>
-<p>Venta y servicio de llantas.</p>
-<a href="https://llantas.exialsa.com">Ver servicios</a>
-</div>
+    <div class="card">
+      <h3>Extintores</h3>
+      <p>Venta, recarga e inspección conforme a normativa.</p>
+    </div>
+
+    <div class="card">
+      <h3>Alcoholes</h3>
+      <p>Suministro y distribución según requerimientos.</p>
+    </div>
+
+    <div class="card">
+      <h3>Llantas</h3>
+      <p>Venta y servicio bajo solicitud del cliente.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section container">
+  <h2>¿Por qué elegirnos?</h2>
+  <ul>
+    <li>Atención directa y rápida</li>
+    <li>Soluciones personalizadas</li>
+    <li>Experiencia en servicios comerciales</li>
+  </ul>
+</section>
+
+<section class="section container">
+  <h2>¿Cómo cotizar?</h2>
+  <ol>
+    <li>Contáctanos por WhatsApp</li>
+    <li>Indica tu necesidad</li>
+    <li>Recibe tu cotización personalizada</li>
+  </ol>
+
+  <a href="https://wa.me/50582194885" class="btn">Cotizar ahora</a>
+</section>
+
+<footer class="footer">
+  <p>© EXIALSA - Managua, Nicaragua</p>
+  <p>Contacto: +505 8219 4885</p>
+</footer>
 
 </body>
 </html>
