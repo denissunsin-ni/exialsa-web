@@ -7,148 +7,112 @@
 <title>EXIALSA | Soluciones industriales y comerciales</title>
 <meta name="description" content="Suministro, inspección y recarga de extintores. Cotización de alcoholes y llantas en Managua.">
 
-<!-- Tipografía corporativa -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:#0b1220;
   --bg-2:#0f172a;
-  --card:#0b1220;
   --line:#1f2937;
   --text:#e5e7eb;
   --muted:#94a3b8;
-  --primary:#dc2626;   /* rojo del logo */
-  --accent:#111827;    /* negro/gris */
+  --primary:#dc2626;
   --white:#f8fafc;
 }
 
-*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  font-family:'Inter',system-ui;
   background:linear-gradient(180deg,#020617,#0b1220 30%,#0f172a 100%);
   color:var(--text);
 }
 
-/* layout */
 .container{max-width:1100px;margin:auto;padding:24px}
 .section{padding:72px 0}
 
-/* header */
 header{
-  position:sticky; top:0; z-index:10;
-  backdrop-filter: blur(6px);
+  position:sticky;top:0;
   background:rgba(2,6,23,.7);
   border-bottom:1px solid var(--line);
 }
+
 header .row{
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex;justify-content:space-between;align-items:center;
 }
+
 .logo img{
   height:42px;
-  background:#fff; padding:4px 10px; border-radius:6px;
+  background:white;
+  padding:4px 10px;
+  border-radius:6px;
 }
 
-/* hero */
 .hero{
-  text-align:center; padding:96px 24px 72px;
+  text-align:center;
+  padding:96px 24px;
 }
+
 .hero h1{
-  font-size:42px; line-height:1.15; margin:0 0 12px;
-  letter-spacing:-.02em;
+  font-size:40px;
+  margin-bottom:10px;
 }
+
 .hero p{
-  color:var(--muted); font-size:18px; margin:0 0 24px;
+  color:var(--muted);
 }
-.badge{
-  display:inline-block; margin-bottom:16px;
-  padding:6px 10px; border:1px solid var(--line);
-  border-radius:999px; color:var(--muted); font-size:12px;
-}
-.cta-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
 
-/* botones */
 .btn{
-  display:inline-flex; align-items:center; gap:8px;
-  background:var(--primary); color:#fff;
-  padding:14px 20px; border-radius:8px;
-  text-decoration:none; font-weight:600;
-  box-shadow:0 6px 18px rgba(220,38,38,.25);
-  transition:.2s ease;
-}
-.btn:hover{transform:translateY(-1px); box-shadow:0 10px 22px rgba(220,38,38,.35)}
-.btn.outline{
-  background:transparent; border:1px solid var(--line);
-  color:var(--white); box-shadow:none;
+  background:var(--primary);
+  color:white;
+  padding:14px 20px;
+  border-radius:8px;
+  text-decoration:none;
+  display:inline-block;
+  margin-top:20px;
 }
 
-/* cards */
 .cards{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:20px;
 }
+
 .card{
-  background:rgba(2,6,23,.7);
+  background:#020617;
   border:1px solid var(--line);
-  border-radius:12px; padding:26px;
-  transition:.25s ease;
+  padding:24px;
+  border-radius:10px;
 }
-.card:hover{
-  border-color:var(--primary);
-  transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(0,0,0,.35);
-}
+
 .card h3{
-  margin:0 0 8px; color:var(--white); letter-spacing:-.01em;
-}
-.card p{margin:0; color:var(--muted)}
-
-/* bloques */
-.section h2{
-  text-align:center; margin:0 0 28px; letter-spacing:-.01em;
-}
-.kpis{
-  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:16px; margin-top:8px;
-}
-.kpi{
-  border:1px dashed var(--line); border-radius:10px; padding:16px;
-  color:var(--muted); text-align:center;
+  color:var(--primary);
 }
 
-/* listas */
-.list{max-width:640px; margin:0 auto; color:var(--muted)}
-.list li{margin-bottom:10px}
-
-/* divider */
-.divider{
-  height:1px; background:linear-gradient(90deg,transparent, var(--line), transparent);
-  margin:32px 0;
+.list{
+  max-width:600px;
+  margin:auto;
 }
 
-/* footer */
+#contacto a{
+  color:var(--white);
+}
+
 .footer{
   border-top:1px solid var(--line);
-  background:#020617; color:var(--muted);
+  text-align:center;
+  padding:30px;
+  color:var(--muted);
 }
-.footer .grid{
-  display:grid; grid-template-columns:1.2fr .8fr; gap:20px;
-}
-.footer a{color:var(--white); text-decoration:none}
 
-/* whatsapp */
 .whatsapp{
-  position:fixed; right:20px; bottom:20px;
-  background:#25D366; color:#fff; border-radius:999px;
-  padding:14px 18px; text-decoration:none; font-weight:600;
-  box-shadow:0 10px 24px rgba(0,0,0,.35);
-}
-
-/* responsive */
-@media (max-width:720px){
-  .hero h1{font-size:32px}
-  .footer .grid{grid-template-columns:1fr}
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25D366;
+  color:white;
+  padding:14px 18px;
+  border-radius:50px;
+  text-decoration:none;
 }
 </style>
 </head>
@@ -160,23 +124,18 @@ header .row{
     <div class="logo">
       <img src="logo.png" alt="EXIALSA">
     </div>
-    <a href="https://wa.me/50582194885" class="btn outline">Cotizar</a>
+    <a href="https://wa.me/50582194885" class="btn">Cotizar</a>
   </div>
 </header>
 
 <section class="hero">
-  <span class="badge">Atención empresarial • Managua</span>
-  <h1>Soluciones industriales bajo cotización</h1>
-  <p>Extintores, alcoholes y llantas. Respuesta rápida y enfoque técnico.</p>
-
-  <div class="cta-row">
-    <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
-    <a href="#contacto" class="btn outline">Ver contacto</a>
-  </div>
+  <h1>Cotice soluciones industriales con EXIALSA</h1>
+  <p>Extintores, alcoholes y llantas para empresas en Nicaragua.</p>
+  <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
 </section>
 
 <section class="section container">
-  <h2>Servicios</h2>
+  <h2>Cotice con nosotros</h2>
 
   <div class="cards">
     <div class="card">
@@ -194,22 +153,14 @@ header .row{
       <p>Venta basado en su solicitud.</p>
     </div>
   </div>
-
-  <div class="divider"></div>
-
-  <div class="kpis">
-    <div class="kpi">Respuesta rápida</div>
-    <div class="kpi">Cotización personalizada</div>
-    <div class="kpi">Enfoque empresarial</div>
-  </div>
 </section>
 
 <section class="section container">
   <h2>¿Por qué EXIALSA?</h2>
   <ul class="list">
-    <li>✔ Atención directa y ágil</li>
-    <li>✔ Soluciones a medida</li>
-    <li>✔ Cumplimiento técnico en servicios</li>
+    <li>✔ Atención directa y rápida</li>
+    <li>✔ Cotizaciones personalizadas</li>
+    <li>✔ Enfoque empresarial</li>
   </ul>
 </section>
 
@@ -232,17 +183,7 @@ header .row{
 </section>
 
 <footer class="footer">
-  <div class="container grid">
-    <div>
-      <strong>EXIALSA</strong>
-      <p>Suministro y servicios industriales bajo cotización.</p>
-    </div>
-    <div>
-      <p><strong>Contacto</strong></p>
-      <p><a href="mailto:denis@sunsin.online">denis@sunsin.online</a></p>
-      <p>+505 8219 4885</p>
-    </div>
-  </div>
+  <p>EXIALSA | Managua, Nicaragua</p>
 </footer>
 
 <a href="https://wa.me/50582194885" class="whatsapp">WhatsApp</a>
