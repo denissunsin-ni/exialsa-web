@@ -3,145 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EXIALSA | Soluciones comerciales</title>
+
+<title>EXIALSA | Soluciones industriales y comerciales</title>
+<meta name="description" content="Suministro, inspección y recarga de extintores. Cotización de alcoholes y llantas en Managua.">
+
+<!-- Tipografía corporativa -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  color: #1a1a1a;
+:root{
+  --bg:#0b1220;
+  --bg-2:#0f172a;
+  --card:#0b1220;
+  --line:#1f2937;
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --primary:#dc2626;   /* rojo del logo */
+  --accent:#111827;    /* negro/gris */
+  --white:#f8fafc;
 }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:linear-gradient(180deg,#020617,#0b1220 30%,#0f172a 100%);
+  color:var(--text);
 }
 
-header {
-  background: white;
-  border-bottom: 1px solid #ddd;
+/* layout */
+.container{max-width:1100px;margin:auto;padding:24px}
+.section{padding:72px 0}
+
+/* header */
+header{
+  position:sticky; top:0; z-index:10;
+  backdrop-filter: blur(6px);
+  background:rgba(2,6,23,.7);
+  border-bottom:1px solid var(--line);
+}
+header .row{
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo img{
+  height:42px;
+  background:#fff; padding:4px 10px; border-radius:6px;
 }
 
-header .container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* hero */
+.hero{
+  text-align:center; padding:96px 24px 72px;
+}
+.hero h1{
+  font-size:42px; line-height:1.15; margin:0 0 12px;
+  letter-spacing:-.02em;
+}
+.hero p{
+  color:var(--muted); font-size:18px; margin:0 0 24px;
+}
+.badge{
+  display:inline-block; margin-bottom:16px;
+  padding:6px 10px; border:1px solid var(--line);
+  border-radius:999px; color:var(--muted); font-size:12px;
+}
+.cta-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+
+/* botones */
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--primary); color:#fff;
+  padding:14px 20px; border-radius:8px;
+  text-decoration:none; font-weight:600;
+  box-shadow:0 6px 18px rgba(220,38,38,.25);
+  transition:.2s ease;
+}
+.btn:hover{transform:translateY(-1px); box-shadow:0 10px 22px rgba(220,38,38,.35)}
+.btn.outline{
+  background:transparent; border:1px solid var(--line);
+  color:var(--white); box-shadow:none;
 }
 
-h1 {
-  color: #0b3d91;
+/* cards */
+.cards{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:20px;
+}
+.card{
+  background:rgba(2,6,23,.7);
+  border:1px solid var(--line);
+  border-radius:12px; padding:26px;
+  transition:.25s ease;
+}
+.card:hover{
+  border-color:var(--primary);
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.card h3{
+  margin:0 0 8px; color:var(--white); letter-spacing:-.01em;
+}
+.card p{margin:0; color:var(--muted)}
+
+/* bloques */
+.section h2{
+  text-align:center; margin:0 0 28px; letter-spacing:-.01em;
+}
+.kpis{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px; margin-top:8px;
+}
+.kpi{
+  border:1px dashed var(--line); border-radius:10px; padding:16px;
+  color:var(--muted); text-align:center;
 }
 
-.hero {
-  background: #0b3d91;
-  color: white;
-  padding: 60px 20px;
-  text-align: center;
+/* listas */
+.list{max-width:640px; margin:0 auto; color:var(--muted)}
+.list li{margin-bottom:10px}
+
+/* divider */
+.divider{
+  height:1px; background:linear-gradient(90deg,transparent, var(--line), transparent);
+  margin:32px 0;
 }
 
-.hero h2 {
-  font-size: 32px;
-  margin-bottom: 10px;
+/* footer */
+.footer{
+  border-top:1px solid var(--line);
+  background:#020617; color:var(--muted);
+}
+.footer .grid{
+  display:grid; grid-template-columns:1.2fr .8fr; gap:20px;
+}
+.footer a{color:var(--white); text-decoration:none}
+
+/* whatsapp */
+.whatsapp{
+  position:fixed; right:20px; bottom:20px;
+  background:#25D366; color:#fff; border-radius:999px;
+  padding:14px 18px; text-decoration:none; font-weight:600;
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
 }
 
-.btn {
-  display: inline-block;
-  background: #ff6b00;
-  color: white;
-  padding: 12px 20px;
-  border-radius: 6px;
-  text-decoration: none;
-  margin-top: 15px;
-}
-
-.section {
-  padding: 50px 20px;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.footer {
-  background: #0b3d91;
-  color: white;
-  text-align: center;
-  padding: 20px;
+/* responsive */
+@media (max-width:720px){
+  .hero h1{font-size:32px}
+  .footer .grid{grid-template-columns:1fr}
 }
 </style>
-
 </head>
+
 <body>
 
 <header>
-  <div class="container">
-    <h1>EXIALSA</h1>
+  <div class="container row">
+    <div class="logo">
+      <img src="logo.png" alt="EXIALSA">
+    </div>
+    <a href="https://wa.me/50582194885" class="btn outline">Cotizar</a>
   </div>
 </header>
 
 <section class="hero">
-  <h2>Soluciones comerciales bajo cotización</h2>
-  <p>Extintores, alcoholes y llantas para empresas y negocios.</p>
-  <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
-</section>
+  <span class="badge">Atención empresarial • Managua</span>
+  <h1>Soluciones industriales bajo cotización</h1>
+  <p>Extintores, alcoholes y llantas. Respuesta rápida y enfoque técnico.</p>
 
-<section class="section container">
-  <h2>Servicios</h2>
-  <div class="cards">
-
-    <div class="card">
-      <h3>Extintores</h3>
-      <p>Venta, recarga e inspección conforme a normativa.</p>
-    </div>
-
-    <div class="card">
-      <h3>Alcoholes</h3>
-      <p>Suministro y distribución según requerimientos.</p>
-    </div>
-
-    <div class="card">
-      <h3>Llantas</h3>
-      <p>Venta y servicio bajo solicitud del cliente.</p>
-    </div>
-
+  <div class="cta-row">
+    <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
+    <a href="#contacto" class="btn outline">Ver contacto</a>
   </div>
 </section>
 
 <section class="section container">
-  <h2>¿Por qué elegirnos?</h2>
-  <ul>
-    <li>Atención directa y rápida</li>
-    <li>Soluciones personalizadas</li>
-    <li>Experiencia en servicios comerciales</li>
+  <h2>Servicios</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>Extintores</h3>
+      <p>Venta, recarga e inspección técnica conforme a normativa.</p>
+    </div>
+
+    <div class="card">
+      <h3>Alcoholes</h3>
+      <p>Suministro industrial y comercial según requerimientos.</p>
+    </div>
+
+    <div class="card">
+      <h3>Llantas</h3>
+      <p>Venta basado en su solicitud.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="kpis">
+    <div class="kpi">Respuesta rápida</div>
+    <div class="kpi">Cotización personalizada</div>
+    <div class="kpi">Enfoque empresarial</div>
+  </div>
+</section>
+
+<section class="section container">
+  <h2>¿Por qué EXIALSA?</h2>
+  <ul class="list">
+    <li>✔ Atención directa y ágil</li>
+    <li>✔ Soluciones a medida</li>
+    <li>✔ Cumplimiento técnico en servicios</li>
   </ul>
 </section>
 
 <section class="section container">
-  <h2>¿Cómo cotizar?</h2>
-  <ol>
-    <li>Contáctanos por WhatsApp</li>
-    <li>Indica tu necesidad</li>
-    <li>Recibe tu cotización personalizada</li>
-  </ol>
+  <h2>Proceso de cotización</h2>
+  <ul class="list">
+    <li>1. Contacto vía WhatsApp</li>
+    <li>2. Levantamiento de requerimiento</li>
+    <li>3. Envío de cotización</li>
+  </ul>
+</section>
 
-  <a href="https://wa.me/50582194885" class="btn">Cotizar ahora</a>
+<section id="contacto" class="section container">
+  <h2>Contacto</h2>
+  <ul class="list">
+    <li><strong>Email:</strong> <a href="mailto:denis@sunsin.online">denis@sunsin.online</a></li>
+    <li><strong>Tel:</strong> <a href="tel:+50582194885">+505 8219 4885</a></li>
+    <li><strong>Tel:</strong> <a href="tel:+50587910837">+505 8791 0837</a></li>
+  </ul>
 </section>
 
 <footer class="footer">
-  <p>© EXIALSA - Managua, Nicaragua</p>
-  <p>Contacto: +505 8219 4885</p>
+  <div class="container grid">
+    <div>
+      <strong>EXIALSA</strong>
+      <p>Suministro y servicios industriales bajo cotización.</p>
+    </div>
+    <div>
+      <p><strong>Contacto</strong></p>
+      <p><a href="mailto:denis@sunsin.online">denis@sunsin.online</a></p>
+      <p>+505 8219 4885</p>
+    </div>
+  </div>
 </footer>
+
+<a href="https://wa.me/50582194885" class="whatsapp">WhatsApp</a>
 
 </body>
 </html>
