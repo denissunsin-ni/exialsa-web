@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EXIALSA | Extintores, Llantas & Alcohol</title>
-<meta name="description" content="Cotizamos:venta, inspección, recarga de extintores, alcoholes de todo tipo y llantas">
+<title>EXIALSA | Cotización de extintores, alcoholes y llantas en Nicaragua</title>
+<meta name="description" content="Cotizamos extintores (venta, inspección y recarga), alcoholes y llantas en Managua. Atención rápida para empresas.">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
@@ -20,6 +20,8 @@
   --white:#f8fafc;
 }
 
+*{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:'Inter',system-ui;
@@ -28,11 +30,13 @@ body{
 }
 
 .container{max-width:1100px;margin:auto;padding:24px}
-.section{padding:72px 0}
+.section{padding:64px 0}
 
+/* HEADER */
 header{
-  position:sticky;top:0;
-  background:rgba(2,6,23,.7);
+  position:sticky;top:0;z-index:10;
+  background:rgba(2,6,23,.85);
+  backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
 }
 
@@ -41,36 +45,48 @@ header .row{
 }
 
 .logo img{
-  height:42px;
+  height:40px;
   background:white;
   padding:4px 10px;
   border-radius:6px;
 }
 
+/* HERO */
 .hero{
   text-align:center;
-  padding:96px 24px;
+  padding:90px 20px;
 }
 
 .hero h1{
-  font-size:40px;
-  margin-bottom:10px;
+  font-size:38px;
+  margin-bottom:12px;
+  line-height:1.2;
 }
 
 .hero p{
   color:var(--muted);
+  font-size:17px;
 }
 
+/* BOTÓN */
 .btn{
   background:var(--primary);
   color:white;
-  padding:14px 20px;
+  padding:14px 22px;
   border-radius:8px;
   text-decoration:none;
   display:inline-block;
   margin-top:20px;
+  font-weight:600;
+  transition:0.2s;
 }
 
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(220,38,38,0.3);
+}
+
+/* CARDS */
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -81,22 +97,42 @@ header .row{
   background:#020617;
   border:1px solid var(--line);
   padding:24px;
-  border-radius:10px;
+  border-radius:12px;
+  transition:0.25s;
+}
+
+.card:hover{
+  border-color:var(--primary);
+  transform:translateY(-4px);
 }
 
 .card h3{
   color:var(--primary);
+  margin-bottom:8px;
 }
 
+/* LISTAS */
 .list{
   max-width:600px;
   margin:auto;
+  color:var(--muted);
 }
 
+.list li{
+  margin-bottom:10px;
+}
+
+/* CONTACTO */
 #contacto a{
   color:var(--white);
+  text-decoration:none;
 }
 
+#contacto a:hover{
+  color:var(--primary);
+}
+
+/* FOOTER */
 .footer{
   border-top:1px solid var(--line);
   text-align:center;
@@ -104,6 +140,7 @@ header .row{
   color:var(--muted);
 }
 
+/* WHATSAPP */
 .whatsapp{
   position:fixed;
   bottom:20px;
@@ -113,6 +150,13 @@ header .row{
   padding:14px 18px;
   border-radius:50px;
   text-decoration:none;
+  font-weight:600;
+  box-shadow:0 6px 18px rgba(0,0,0,0.3);
+}
+
+/* RESPONSIVE */
+@media (max-width:600px){
+  .hero h1{font-size:30px}
 }
 </style>
 </head>
