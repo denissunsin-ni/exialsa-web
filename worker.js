@@ -180,9 +180,17 @@ export default {
       }
     }
 
-    if (request.method === 'GET' && url.pathname === '/cotizacion') {
-      const rewrittenRequest = new Request(new URL('/index.html', url.origin), request);
-      return env.ASSETS.fetch(rewrittenRequest);
+    if (request.method === 'GET' && (url.pathname === '/cotizacion' || url.pathname === '/cotizacion/')) {
+      const assetUrl = new URL(request.url);
+      assetUrl.pathname = '/index.html';
+      assetUrl.search = '';
+
+      const assetRequest = new Request(assetUrl.toString(), {
+        method: 'GET',
+        headers: request.headers
+      });
+
+      return env.ASSETS.fetch(assetRequest);
     }
 
     return env.ASSETS.fetch(request);
