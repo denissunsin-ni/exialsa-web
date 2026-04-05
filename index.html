@@ -310,20 +310,31 @@ h2{
 
 .contact-lines{
   display:grid;
-  gap:12px;
+  gap:16px;
 }
 
 .contact-line{
+  display:flex;
+  align-items:center;
+  gap:14px;
   color:var(--text);
   font-size:1.08rem;
   line-height:1.6;
 }
 
-.contact-line span{
-  display:inline-block;
-  min-width:34px;
-  font-weight:700;
-  color:var(--blue);
+.contact-icons{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:54px;
+}
+
+.contact-icon{
+  width:22px;
+  height:22px;
+  flex:0 0 22px;
+  display:block;
+  color:#2b8dd8;
 }
 
 #contacto a{
@@ -351,26 +362,29 @@ h2{
 }
 
 .whatsapp{
-  background:#25D366;
+  background:linear-gradient(180deg, rgba(57,226,122,0.96) 0%, rgba(37,211,102,0.94) 100%);
   color:white;
   width:62px;
   height:62px;
   border-radius:50%;
-  text-decoration:none;
   display:flex;
   align-items:center;
   justify-content:center;
+  border:1px solid rgba(255,255,255,0.58);
   box-shadow:
-    0 12px 28px rgba(37,211,102,0.24),
-    0 4px 10px rgba(15,23,42,0.10),
+    0 10px 22px rgba(37,211,102,0.14),
     inset 0 1px 0 rgba(255,255,255,0.35);
-  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
-  animation:floatWhatsapp 4.8s ease-in-out infinite;
+  backdrop-filter:blur(8px);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  animation:floatWhatsapp 5.6s ease-in-out infinite;
 }
 
 .whatsapp:hover{
-  transform:scale(1.08);
-  box-shadow:0 14px 28px rgba(37,211,102,0.3);
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:
+    0 14px 28px rgba(37,211,102,0.18),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  filter:saturate(1.02);
 }
 
 .whatsapp svg{
@@ -387,16 +401,14 @@ h2{
   0%, 100%{
     transform:translateY(0);
     box-shadow:
-      0 12px 28px rgba(37,211,102,0.24),
-      0 4px 10px rgba(15,23,42,0.10),
+      0 10px 22px rgba(37,211,102,0.14),
       inset 0 1px 0 rgba(255,255,255,0.35);
   }
   50%{
-    transform:translateY(-5px);
+    transform:translateY(-3px);
     box-shadow:
-      0 18px 34px rgba(37,211,102,0.28),
-      0 8px 16px rgba(15,23,42,0.12),
-      inset 0 1px 0 rgba(255,255,255,0.38);
+      0 14px 26px rgba(37,211,102,0.18),
+      inset 0 1px 0 rgba(255,255,255,0.4);
   }
 }
 
@@ -518,13 +530,33 @@ h2{
 </section>
 
 <section id="contacto" class="section container">
-  <div class="contact-section">
+  <div class="contact-section reveal" id="contact-section">
     <h2>Contacto</h2>
     <div class="contact-divider"></div>
 
     <div class="contact-lines">
-      <div class="contact-line"><span>T:</span><a href="tel:+50582194885">+505 8219 4885</a></div>
-      <div class="contact-line"><span>T:</span><a href="tel:+50587910837">+505 8791 0837</a></div>
+      <div class="contact-line">
+        <div class="contact-icons">
+          <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1-.24c1.12.37 2.33.56 3.59.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.07 21 3 13.93 3 5a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.26.19 2.47.56 3.59a1 1 0 0 1-.24 1l-2.2 2.2Z"/>
+          </svg>
+          <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
+          </svg>
+        </div>
+        <a href="tel:+50582194885">+505 8219 4885</a>
+      </div>
+      <div class="contact-line">
+        <div class="contact-icons">
+          <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1-.24c1.12.37 2.33.56 3.59.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.07 21 3 13.93 3 5a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.26.19 2.47.56 3.59a1 1 0 0 1-.24 1l-2.2 2.2Z"/>
+          </svg>
+          <svg class="contact-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
+          </svg>
+        </div>
+        <a href="https://wa.me/50587910837?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar" target="_blank" rel="noopener noreferrer">+505 8791 0837</a>
+      </div>
     </div>
   </div>
 </section>
@@ -549,6 +581,7 @@ const formStatus = document.getElementById('form-status');
 const submitButton = document.getElementById('submit-btn');
 const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
 const quoteFormWrap = document.getElementById('quote-form-wrap');
+const contactSection = document.getElementById('contact-section');
 const whatsappButton = document.getElementById('whatsapp-button');
 const WHATSAPP_URL = 'https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar';
 
@@ -695,6 +728,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 
 if (quoteForm) {
   initReveal(quoteFormWrap);
+  initReveal(contactSection);
 
   const draftRestored = restoreFormDraft();
 
