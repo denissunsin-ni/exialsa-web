@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>EXIALSA | Cotización de extintores, alcoholes y llantas en Nicaragua</title>
+<title>EXIALSA</title>
 <meta name="description" content="Cotizamos extintores, alcoholes y llantas con atención rápida y soluciones confiables.">
 
 <link rel="icon" href="exialsafavicon.png" type="image/png">
@@ -211,6 +211,17 @@ h2{
   box-shadow:0 18px 40px rgba(15,76,129,0.08);
 }
 
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .7s ease, transform .7s ease;
+}
+
+.reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
 .form-intro{
   margin-top:0;
   margin-bottom:22px;
@@ -332,11 +343,17 @@ h2{
   background:#f8fafc;
 }
 
-.whatsapp{
+.whatsapp-wrap{
   position:fixed;
-  bottom:20px;
   right:20px;
-  background:#25D366;
+  bottom:20px;
+  z-index:20;
+}
+
+.whatsapp{
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.24), transparent 34%),
+    linear-gradient(180deg, #39e27a 0%, #25D366 65%, #1fb958 100%);
   color:white;
   width:62px;
   height:62px;
@@ -345,13 +362,23 @@ h2{
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 10px 24px rgba(37,211,102,0.22);
-  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+  border:1px solid rgba(255,255,255,0.42);
+  box-shadow:
+    0 12px 26px rgba(37,211,102,0.18),
+    0 0 0 6px rgba(37,211,102,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+  backdrop-filter:blur(6px);
+  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
+  animation:floatWhatsapp 5.8s ease-in-out infinite;
 }
 
 .whatsapp:hover{
-  transform:scale(1.08);
-  box-shadow:0 14px 28px rgba(37,211,102,0.3);
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:
+    0 14px 28px rgba(37,211,102,0.22),
+    0 0 0 8px rgba(37,211,102,0.10),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  filter:saturate(1.03);
 }
 
 .whatsapp svg{
@@ -364,6 +391,23 @@ h2{
   to{transform:rotate(360deg)}
 }
 
+@keyframes floatWhatsapp{
+  0%, 100%{
+    transform:translateY(0);
+    box-shadow:
+      0 12px 26px rgba(37,211,102,0.18),
+      0 0 0 6px rgba(37,211,102,0.08),
+      inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+  50%{
+    transform:translateY(-3px);
+    box-shadow:
+      0 16px 30px rgba(37,211,102,0.20),
+      0 0 0 8px rgba(37,211,102,0.10),
+      inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+}
+
 @media (max-width:600px){
   .hero h1{font-size:34px}
   .form-wrap{padding:22px}
@@ -372,6 +416,10 @@ h2{
   .logo img{
     height:132px;
     padding:10px 14px;
+  }
+  .whatsapp-wrap{
+    bottom:16px;
+    right:16px;
   }
 }
 </style>
@@ -389,7 +437,7 @@ h2{
 
 <section class="hero">
   <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
-  <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
+  <a href="/cotizacion" class="btn">Solicitar cotización</a>
 </section>
 
 <section class="section container">
@@ -402,7 +450,7 @@ h2{
         <h3>EXTINTORES</h3>
         <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="/cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -411,7 +459,7 @@ h2{
         <h3>ALCOHOLES</h3>
         <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="/cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -420,13 +468,13 @@ h2{
         <h3>LLANTAS</h3>
         <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="/cotizacion" class="btn">Ver catálogo</a>
     </div>
   </div>
 </section>
 
 <section id="formulario-cotizacion" class="section container">
-  <div class="form-wrap">
+  <div class="form-wrap reveal" id="quote-form-wrap">
     <h2>Formulario de cotización</h2>
     <p class="form-intro">Complete sus datos y cuéntenos qué necesita. Le contactaremos a la brevedad.</p>
 
@@ -490,14 +538,16 @@ h2{
 </section>
 
 <footer class="footer">
-  <p>EXIALSA | Managua, Nicaragua</p>
+  <p>EXIALSA</p>
 </footer>
 
-<a href="https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar" class="whatsapp" aria-label="WhatsApp">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-    <path fill="#fff" d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
-  </svg>
-</a>
+<div class="whatsapp-wrap">
+  <button type="button" class="whatsapp" id="whatsapp-button" aria-label="WhatsApp">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path fill="#fff" d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
+    </svg>
+  </button>
+</div>
 
 <script>
 const header = document.querySelector('header');
@@ -506,6 +556,9 @@ const quoteForm = document.getElementById('quote-form');
 const formStatus = document.getElementById('form-status');
 const submitButton = document.getElementById('submit-btn');
 const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
+const quoteFormWrap = document.getElementById('quote-form-wrap');
+const whatsappButton = document.getElementById('whatsapp-button');
+const WHATSAPP_URL = 'https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar';
 
 const STORAGE_KEY = 'exialsa_quote_form';
 const STORAGE_MAX_AGE = 12 * 60 * 60 * 1000;
@@ -616,6 +669,35 @@ function setButtonLoading(isLoading) {
   submitButtonText.textContent = isLoading ? 'Enviando...' : 'Enviar solicitud';
 }
 
+function initReveal(element) {
+  if (!element) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        element.classList.add('is-visible');
+      } else {
+        element.classList.remove('is-visible');
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  observer.observe(element);
+}
+
+function openQuoteSectionFromRoute() {
+  if (!quoteFormWrap) return;
+  if (window.location.pathname !== '/cotizacion') return;
+
+  quoteFormWrap.classList.add('is-visible');
+
+  window.requestAnimationFrame(() => {
+    quoteFormWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+}
+
 async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -631,6 +713,9 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 }
 
 if (quoteForm) {
+  initReveal(quoteFormWrap);
+  openQuoteSectionFromRoute();
+
   const draftRestored = restoreFormDraft();
 
   if (draftRestored) {
@@ -687,6 +772,12 @@ if (quoteForm) {
     } finally {
       setButtonLoading(false);
     }
+  });
+}
+
+if (whatsappButton) {
+  whatsappButton.addEventListener('click', () => {
+    window.location.href = WHATSAPP_URL;
   });
 }
 </script>
