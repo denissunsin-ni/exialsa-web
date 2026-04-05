@@ -44,6 +44,7 @@ body{
 
 .section{
   padding:64px 0;
+  scroll-margin-top:100px;
 }
 
 header{
@@ -421,6 +422,13 @@ h2{
 }
 
 .reveal.is-visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+#catalogo-alcoholes:target .reveal,
+#formulario-cotizacion:target .reveal,
+#contacto:target .reveal{
   opacity:1;
   transform:translateY(0);
 }
