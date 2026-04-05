@@ -47,6 +47,18 @@ body{
   scroll-margin-top:100px;
 }
 
+.catalog-view{
+  display:none;
+}
+
+body.catalog-mode .catalog-view{
+  display:block;
+}
+
+body.catalog-mode .home-view{
+  display:none;
+}
+
 header{
   position:sticky;
   top:0;
@@ -657,12 +669,12 @@ h2{
   </div>
 </header>
 
-<section id="inicio" class="hero">
+<section id="inicio" class="hero home-view">
   <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
-  <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
+  <a href="#formulario-cotizacion" class="btn" data-view="home">Solicitar cotización</a>
 </section>
 
-<section class="section container">
+<section class="section container home-view">
   <h2 class="section-heading">Gestionamos su cotización con proveedores confiables</h2>
 
   <div class="cards">
@@ -672,7 +684,7 @@ h2{
         <h3>EXTINTORES</h3>
         <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn" data-product="Extintores">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn" data-product="Extintores" data-view="home">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -681,7 +693,7 @@ h2{
         <h3>ALCOHOLES</h3>
         <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
       </div>
-      <a href="#catalogo-alcoholes" class="btn" data-product="Alcoholes">Ver catálogo</a>
+      <a href="#catalogo-alcoholes" class="btn" data-product="Alcoholes" data-view="catalog">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -690,12 +702,12 @@ h2{
         <h3>LLANTAS</h3>
         <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn" data-product="Llantas">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn" data-product="Llantas" data-view="home">Ver catálogo</a>
     </div>
   </div>
 </section>
 
-<section id="catalogo-alcoholes" class="section container">
+<section id="catalogo-alcoholes" class="section container catalog-view">
   <div class="catalog-shell reveal" id="catalog-alcoholes-section">
     <div class="catalog-top">
       <div>
@@ -706,7 +718,7 @@ h2{
           Especialistas en suministro de alcoholes para uso industrial, sanitario y técnico. Ofrecemos productos en diferentes tipos y concentraciones, garantizando calidad, disponibilidad y adaptación a cada necesidad operativa.
         </p>
       </div>
-      <a href="#inicio" class="btn btn-secondary">Regresar al inicio</a>
+        <a href="#inicio" class="btn btn-secondary" data-view="home">Regresar al inicio</a>
     </div>
 
     <div class="catalog-grid">
@@ -750,8 +762,8 @@ h2{
         </div>
 
         <div class="catalog-cta">
-          <a href="#formulario-cotizacion" class="btn" data-product="Alcoholes">Solicitar cotización de alcoholes</a>
-          <a href="#contacto" class="btn btn-secondary">Hablar con asesor</a>
+          <a href="#formulario-cotizacion" class="btn" data-product="Alcoholes" data-view="catalog">Solicitar cotización de alcoholes</a>
+          <a href="#formulario-cotizacion" class="btn btn-secondary" data-product="Alcoholes" data-view="catalog">Hablar con asesor</a>
         </div>
       </div>
     </div>
@@ -810,7 +822,7 @@ h2{
   </div>
 </section>
 
-<section id="contacto" class="section container">
+<section id="contacto" class="section container home-view">
   <div class="contact-section reveal" id="contact-section">
     <h2>Contacto</h2>
     <div class="contact-divider"></div>
@@ -867,10 +879,12 @@ const alcoholCatalogSection = document.getElementById('catalog-alcoholes-section
 const contactSection = document.getElementById('contact-section');
 const whatsappButton = document.getElementById('whatsapp-button');
 const productLinks = document.querySelectorAll('[data-product]');
+const viewLinks = document.querySelectorAll('[data-view]');
 const WHATSAPP_URL = 'https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar';
 
 const STORAGE_KEY = 'exialsa_quote_form';
 const STORAGE_MAX_AGE = 12 * 60 * 60 * 1000;
+const VIEW_MODE_KEY = 'exialsa_view_mode';
 let statusTimer = null;
 
 window.addEventListener('scroll', () => {
@@ -1008,6 +1022,29 @@ function revealFromHash() {
   }
 }
 
+function applyViewMode(mode) {
+  document.body.classList.toggle('catalog-mode', mode === 'catalog');
+  try {
+    sessionStorage.setItem(VIEW_MODE_KEY, mode);
+  } catch {}
+}
+
+function getInitialViewMode() {
+  if (window.location.hash === '#catalogo-alcoholes') {
+    return 'catalog';
+  }
+
+  if (window.location.hash === '#inicio' || window.location.hash === '' || !window.location.hash) {
+    return 'home';
+  }
+
+  try {
+    return sessionStorage.getItem(VIEW_MODE_KEY) || 'home';
+  } catch {
+    return 'home';
+  }
+}
+
 function preselectProduct(productName) {
   if (!productField || !productName) return;
   productField.value = productName;
@@ -1028,6 +1065,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 }
 
 if (quoteForm) {
+  applyViewMode(getInitialViewMode());
   initReveal(alcoholCatalogSection);
   initReveal(quoteFormWrap);
   initReveal(contactSection);
@@ -1098,6 +1136,22 @@ productLinks.forEach((link) => {
   link.addEventListener('click', () => {
     preselectProduct(link.dataset.product);
   });
+});
+
+viewLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    applyViewMode(link.dataset.view || 'home');
+  });
+});
+
+window.addEventListener('hashchange', () => {
+  if (window.location.hash === '#catalogo-alcoholes') {
+    applyViewMode('catalog');
+  } else if (window.location.hash === '#inicio' || window.location.hash === '') {
+    applyViewMode('home');
+  }
+
+  revealFromHash();
 });
 
 if (whatsappButton) {
