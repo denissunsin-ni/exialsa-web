@@ -855,7 +855,7 @@ const submitButton = document.getElementById('submit-btn');
 const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
 const productField = document.getElementById('producto');
 const quoteFormWrap = document.getElementById('quote-form-wrap');
-const alcoholCatalogSection = document.getElementById('catalogo-alcoholes-section');
+const alcoholCatalogSection = document.getElementById('catalog-alcoholes-section');
 const contactSection = document.getElementById('contact-section');
 const whatsappButton = document.getElementById('whatsapp-button');
 const productLinks = document.querySelectorAll('[data-product]');
@@ -988,6 +988,18 @@ function initReveal(element) {
   observer.observe(element);
 }
 
+function revealFromHash() {
+  if (!window.location.hash) return;
+
+  const target = document.querySelector(window.location.hash);
+  if (!target) return;
+
+  const revealTarget = target.classList.contains('reveal') ? target : target.querySelector('.reveal');
+  if (revealTarget) {
+    revealTarget.classList.add('is-visible');
+  }
+}
+
 function preselectProduct(productName) {
   if (!productField || !productName) return;
   productField.value = productName;
@@ -1011,6 +1023,7 @@ if (quoteForm) {
   initReveal(alcoholCatalogSection);
   initReveal(quoteFormWrap);
   initReveal(contactSection);
+  revealFromHash();
 
   const draftRestored = restoreFormDraft();
 
@@ -1070,6 +1083,8 @@ if (quoteForm) {
     }
   });
 }
+
+window.addEventListener('hashchange', revealFromHash);
 
 productLinks.forEach((link) => {
   link.addEventListener('click', () => {
