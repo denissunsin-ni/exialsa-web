@@ -181,16 +181,7 @@ export default {
     }
 
     if (request.method === 'GET' && (url.pathname === '/cotizacion' || url.pathname === '/cotizacion/')) {
-      const assetUrl = new URL(request.url);
-      assetUrl.pathname = '/index.html';
-      assetUrl.search = '';
-
-      const assetRequest = new Request(assetUrl.toString(), {
-        method: 'GET',
-        headers: request.headers
-      });
-
-      return env.ASSETS.fetch(assetRequest);
+      return Response.redirect(`${url.origin}/#formulario-cotizacion`, 302);
     }
 
     return env.ASSETS.fetch(request);
