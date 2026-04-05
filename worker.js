@@ -180,6 +180,11 @@ export default {
       }
     }
 
+    if (request.method === 'GET' && url.pathname === '/cotizacion') {
+      const rewrittenRequest = new Request(new URL('/index.html', url.origin), request);
+      return env.ASSETS.fetch(rewrittenRequest);
+    }
+
     return env.ASSETS.fetch(request);
   }
 };
