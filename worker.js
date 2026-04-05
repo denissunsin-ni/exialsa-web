@@ -24,35 +24,13 @@ function escapeHtml(value = '') {
     .replace(/'/g, '&#39;');
 }
 
-async function handleQuote(request, env) {
-  const contentType = request.headers.get('content-type') || '';
+function maskEmail(email = '') {
+  const [user = '', domain = ''] = String(email).split('@');
+  if (!user || !domain) return 'destinatario';
+  return `${user.slice(0, 2)}***@${domain}`;
+}
 
-  if (!contentType.includes('application/json')) {
-    return json({ error: 'Formato de solicitud no válido.' }, 415);
-  }
-
-  const body = await request.json();
-  const nombre = String(body.nombre || '').trim();
-  const empresa = String(body.empresa || '').trim();
-  const telefono = String(body.telefono || '').trim();
-  const correo = String(body.correo || '').trim();
-  const producto = String(body.producto || '').trim();
-  const detalle = String(body.detalle || '').trim();
-
-  if (!nombre || !telefono || !correo || !producto || !detalle) {
-    return json({ error: 'Complete todos los campos obligatorios.' }, 400);
-  }
-
-  if (!env.RESEND_API_KEY || !env.RESEND_FROM_EMAIL) {
-    return json({
-      error: 'Faltan variables en Cloudflare.',
-      debug: {
-        hasResendApiKey: Boolean(env.RESEND_API_KEY),
-        hasResendFromEmail: Boolean(env.RESEND_FROM_EMAIL)
-      }
-    }, 500);
-  }
-
+function buildMessage({ nombre, empresa, telefono, correo, producto, detalle }) {
   const subject = `Nueva solicitud de cotizacion - ${producto}`;
   const html = `
     <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;">
@@ -78,56 +56,110 @@ async function handleQuote(request, env) {
     detalle
   ].join('\n');
 
-  const sendResults = await Promise.all(
-    RECIPIENTS.map(async (recipient) => {
-      const resendResponse = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${env.RESEND_API_KEY}`,
-          'Content-Type': 'application/json',
-          'User-Agent': 'exialsa-web/1.0'
-        },
-        body: JSON.stringify({
-          from: env.RESEND_FROM_EMAIL,
-          to: [recipient],
-          reply_to: correo,
-          subject,
-          html,
-          text
-        })
-      });
+  return { subject, html, text };
+}
 
-      const responseText = await resendResponse.text();
-
-      let parsedResponse;
-      try {
-        parsedResponse = JSON.parse(responseText);
-      } catch {
-        parsedResponse = responseText;
-      }
-
-      return {
-        recipient,
-        ok: resendResponse.ok,
-        status: resendResponse.status,
-        response: parsedResponse
-      };
+async function sendToRecipient(env, recipient, replyTo, message) {
+  const resendResponse = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'exialsa-web/1.0'
+    },
+    body: JSON.stringify({
+      from: env.RESEND_FROM_EMAIL,
+      to: [recipient],
+      reply_to: replyTo,
+      subject: message.subject,
+      html: message.html,
+      text: message.text
     })
+  });
+
+  const raw = await resendResponse.text();
+  let parsed;
+
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    parsed = raw;
+  }
+
+  return {
+    recipient,
+    ok: resendResponse.ok,
+    status: resendResponse.status,
+    parsed
+  };
+}
+
+async function handleQuote(request, env) {
+  const contentType = request.headers.get('content-type') || '';
+
+  if (!contentType.includes('application/json')) {
+    return json({ error: 'No se pudo procesar la solicitud.' }, 415);
+  }
+
+  const body = await request.json();
+  const nombre = String(body.nombre || '').trim();
+  const empresa = String(body.empresa || '').trim();
+  const telefono = String(body.telefono || '').trim();
+  const correo = String(body.correo || '').trim();
+  const producto = String(body.producto || '').trim();
+  const detalle = String(body.detalle || '').trim();
+
+  if (!nombre || !telefono || !correo || !producto || !detalle) {
+    return json({ error: 'Complete todos los campos obligatorios.' }, 400);
+  }
+
+  if (!env.RESEND_API_KEY || !env.RESEND_FROM_EMAIL) {
+    console.error('Missing email configuration', {
+      hasResendApiKey: Boolean(env.RESEND_API_KEY),
+      hasResendFromEmail: Boolean(env.RESEND_FROM_EMAIL)
+    });
+    return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 500);
+  }
+
+  const message = buildMessage({
+    nombre,
+    empresa,
+    telefono,
+    correo,
+    producto,
+    detalle
+  });
+
+  const results = await Promise.all(
+    RECIPIENTS.map((recipient) => sendToRecipient(env, recipient, correo, message))
   );
 
-  const failed = sendResults.filter((result) => !result.ok);
+  const failed = results.filter((result) => !result.ok);
 
   if (failed.length > 0) {
-    return json({
-      error: 'Uno o más correos no pudieron enviarse.',
-      details: sendResults
-    }, 502);
+    console.error(
+      'Email delivery failure',
+      failed.map((result) => ({
+        recipient: maskEmail(result.recipient),
+        status: result.status,
+        response: result.parsed
+      }))
+    );
+
+    return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 502);
   }
+
+  console.log(
+    'Email submission accepted',
+    results.map((result) => ({
+      recipient: maskEmail(result.recipient),
+      status: result.status
+    }))
+  );
 
   return json({
     ok: true,
-    message: 'Solicitud enviada correctamente.',
-    details: sendResults
+    message: 'Solicitud enviada correctamente.'
   });
 }
 
@@ -143,9 +175,8 @@ export default {
       try {
         return await handleQuote(request, env);
       } catch (error) {
-        return json({
-          error: error instanceof Error ? error.message : 'Error interno del servidor.'
-        }, 500);
+        console.error('Unexpected quote error', error);
+        return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 500);
       }
     }
 
