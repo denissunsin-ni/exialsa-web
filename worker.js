@@ -76,29 +76,50 @@ async function handleQuote(request, env) {
     detalle
   ].join('\n');
 
-  const resendResponse = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.RESEND_API_KEY}`,
-      'Content-Type': 'application/json',
-      'User-Agent': 'exialsa-web/1.0'
-    },
-    body: JSON.stringify({
-      from: env.RESEND_FROM_EMAIL,
-      to: RECIPIENTS,
-      reply_to: correo,
-      subject,
-      html,
-      text
-    })
-  });
+  const sendResults = await Promise.all(
+    RECIPIENTS.map(async (recipient) => {
+      const resendResponse = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+          'User-Agent': 'exialsa-web/1.0'
+        },
+        body: JSON.stringify({
+          from: env.RESEND_FROM_EMAIL,
+          to: [recipient],
+          reply_to: correo,
+          subject,
+          html,
+          text
+        })
+      });
 
-  if (!resendResponse.ok) {
-    const errorText = await resendResponse.text();
-    return json({ error: `Resend rechazo el envio: ${errorText}` }, 502);
+      const responseText = await resendResponse.text();
+
+      return {
+        recipient,
+        ok: resendResponse.ok,
+        status: resendResponse.status,
+        response: responseText
+      };
+    })
+  );
+
+  const failed = sendResults.filter((result) => !result.ok);
+
+  if (failed.length > 0) {
+    return json({
+      error: 'Uno o más correos no pudieron enviarse.',
+      details: sendResults
+    }, 502);
   }
 
-  return json({ ok: true, message: 'Solicitud enviada correctamente.' });
+  return json({
+    ok: true,
+    message: 'Solicitud enviada correctamente.',
+    details: sendResults
+  });
 }
 
 export default {
@@ -113,7 +134,9 @@ export default {
       try {
         return await handleQuote(request, env);
       } catch (error) {
-        return json({ error: error instanceof Error ? error.message : 'Error interno del servidor.' }, 500);
+        return json({
+          error: error instanceof Error ? error.message : 'Error interno del servidor.'
+        }, 500);
       }
     }
 
