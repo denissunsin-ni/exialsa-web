@@ -21,6 +21,8 @@
   --blue:#0f4c81;
   --blue-soft:#eaf3fb;
   --white:#ffffff;
+  --ease-premium:cubic-bezier(.22,1,.36,1);
+  --ease-soft:cubic-bezier(.4,0,.2,1);
 }
 
 *{box-sizing:border-box}
@@ -53,10 +55,15 @@ body{
 
 body.catalog-mode .catalog-view{
   display:block;
+  animation:viewFadeIn .7s var(--ease-premium) both;
 }
 
 body.catalog-mode .home-view{
   display:none;
+}
+
+body:not(.catalog-mode) .home-view{
+  animation:viewFadeIn .55s var(--ease-premium) both;
 }
 
 body.catalog-mode header{
@@ -70,7 +77,7 @@ header{
   background:rgba(255,255,255,.95);
   backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
-  transition:transform .35s ease, box-shadow .3s ease, background-color .3s ease;
+  transition:transform .55s var(--ease-premium), box-shadow .45s var(--ease-soft), background-color .45s var(--ease-soft);
 }
 
 header.hidden{
@@ -121,17 +128,19 @@ header .row{
   gap:10px;
   margin-top:20px;
   font-weight:600;
-  transition:.2s;
+  transition:transform .38s var(--ease-premium), background-color .3s var(--ease-soft), box-shadow .38s var(--ease-premium), filter .3s var(--ease-soft);
   box-shadow:0 10px 24px rgba(220,38,38,0.18);
   border:none;
   cursor:pointer;
   font:inherit;
+  will-change:transform, box-shadow;
 }
 
 .btn:hover{
-  transform:translateY(-2px);
+  transform:translateY(-3px);
   background:#b91c1c;
-  box-shadow:0 12px 24px rgba(220,38,38,0.28);
+  box-shadow:0 16px 30px rgba(220,38,38,0.24);
+  filter:saturate(1.02);
 }
 
 .btn:disabled{
@@ -173,17 +182,19 @@ h2{
   border:1px solid var(--line);
   padding:28px;
   border-radius:18px;
-  transition:.25s;
+  transition:transform .45s var(--ease-premium), box-shadow .45s var(--ease-premium), border-color .32s var(--ease-soft);
   box-shadow:0 12px 30px rgba(15,76,129,0.08);
   display:flex;
   flex-direction:column;
   justify-content:space-between;
   min-height:260px;
+  will-change:transform, box-shadow;
 }
 
 .card:hover{
   border-color:var(--blue);
-  transform:translateY(-4px);
+  transform:translateY(-8px);
+  box-shadow:0 22px 48px rgba(15,76,129,0.12);
 }
 
 .card-copy{
@@ -226,6 +237,7 @@ h2{
   box-shadow:0 18px 42px rgba(15,76,129,0.10);
   display:grid;
   gap:28px;
+  transition:transform .55s var(--ease-premium), box-shadow .55s var(--ease-premium), border-color .35s var(--ease-soft);
 }
 
 .catalog-top{
@@ -239,6 +251,15 @@ h2{
 .catalog-top h2{
   margin:8px 0 10px;
   font-size:2.1rem;
+}
+
+.catalog-main-title{
+  margin:0 0 16px;
+  font-size:48px;
+  line-height:1.2;
+  color:var(--blue);
+  font-weight:800;
+  letter-spacing:-0.02em;
 }
 
 .catalog-intro{
@@ -259,7 +280,7 @@ h2{
 .btn-secondary:hover{
   background:#ffffff;
   color:var(--blue);
-  box-shadow:0 12px 24px rgba(15,76,129,0.12);
+  box-shadow:0 14px 28px rgba(15,76,129,0.12);
 }
 
 .catalog-grid{
@@ -392,6 +413,14 @@ h2{
   border-radius:18px;
   padding:22px;
   box-shadow:0 10px 24px rgba(15,76,129,0.05);
+  transition:transform .45s var(--ease-premium), box-shadow .45s var(--ease-premium), border-color .32s var(--ease-soft);
+  will-change:transform, box-shadow;
+}
+
+.catalog-group:hover{
+  transform:translateY(-4px);
+  box-shadow:0 18px 34px rgba(15,76,129,0.09);
+  border-color:rgba(15,76,129,0.18);
 }
 
 .catalog-group h3{
@@ -429,17 +458,21 @@ h2{
   border-radius:18px;
   padding:32px;
   box-shadow:0 18px 40px rgba(15,76,129,0.08);
+  transition:transform .55s var(--ease-premium), box-shadow .55s var(--ease-premium), border-color .35s var(--ease-soft);
 }
 
 .reveal{
   opacity:0;
-  transform:translateY(28px);
-  transition:opacity .7s ease, transform .7s ease;
+  transform:translateY(32px) scale(.985);
+  filter:blur(10px);
+  transition:opacity .9s var(--ease-soft), transform .9s var(--ease-premium), filter .9s var(--ease-soft);
+  will-change:transform, opacity, filter;
 }
 
 .reveal.is-visible{
   opacity:1;
-  transform:translateY(0);
+  transform:translateY(0) scale(1);
+  filter:blur(0);
 }
 
 #catalogo-alcoholes:target .reveal,
@@ -482,7 +515,7 @@ h2{
   color:var(--text);
   background:#fff;
   outline:none;
-  transition:border-color .2s ease, box-shadow .2s ease;
+  transition:border-color .28s var(--ease-soft), box-shadow .28s var(--ease-soft), transform .28s var(--ease-soft);
 }
 
 .field textarea{
@@ -517,6 +550,7 @@ h2{
   border-radius:20px;
   padding:36px 40px;
   box-shadow:0 20px 45px rgba(15,76,129,0.12);
+  transition:transform .55s var(--ease-premium), box-shadow .55s var(--ease-premium), border-color .35s var(--ease-soft);
 }
 
 .contact-section h2{
@@ -602,8 +636,9 @@ h2{
     0 10px 22px rgba(37,211,102,0.14),
     inset 0 1px 0 rgba(255,255,255,0.35);
   backdrop-filter:blur(8px);
-  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
-  animation:floatWhatsapp 5.6s ease-in-out infinite;
+  transition:transform .42s var(--ease-premium), box-shadow .42s var(--ease-premium), filter .32s var(--ease-soft);
+  animation:floatWhatsapp 5.8s var(--ease-premium) infinite;
+  will-change:transform, box-shadow;
 }
 
 .whatsapp:hover{
@@ -639,10 +674,32 @@ h2{
   }
 }
 
+@keyframes viewFadeIn{
+  from{
+    opacity:0;
+    transform:translateY(16px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,
+  *::before,
+  *::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}
+
 @media (max-width:600px){
   .hero h1{font-size:34px}
   .catalog-shell{padding:22px}
   .catalog-top h2{font-size:1.7rem}
+  .catalog-main-title{font-size:34px}
   .catalog-grid{grid-template-columns:1fr}
   .form-wrap{padding:22px}
   .contact-section{padding:28px 24px}
@@ -711,10 +768,8 @@ h2{
   <div class="catalog-shell" id="catalog-alcoholes-section">
     <div class="catalog-top">
       <div>
-        <span class="card-tag">Catálogo disponible</span>
-        <h2>ALCOHOLES</h2>
+        <h1 class="catalog-main-title">DISTRIBUIDORA DE ALCOHOLES SUNSIN</h1>
         <p class="catalog-intro">
-          <strong style="color:var(--text);">DISTRIBUIDORA DE ALCOHOLES SUNSIN</strong><br>
           Especialistas en suministro de alcoholes para uso industrial, sanitario y técnico. Ofrecemos productos en diferentes tipos y concentraciones, garantizando calidad, disponibilidad y adaptación a cada necesidad operativa.
         </p>
       </div>
