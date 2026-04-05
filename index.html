@@ -98,7 +98,10 @@ header .row{
   padding:14px 22px;
   border-radius:8px;
   text-decoration:none;
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   margin-top:20px;
   font-weight:600;
   transition:.2s;
@@ -112,6 +115,26 @@ header .row{
   transform:translateY(-2px);
   background:#b91c1c;
   box-shadow:0 12px 24px rgba(220,38,38,0.28);
+}
+
+.btn:disabled{
+  opacity:.9;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.btn .spinner{
+  width:16px;
+  height:16px;
+  border:2px solid rgba(255,255,255,.45);
+  border-top-color:#ffffff;
+  border-radius:50%;
+  display:none;
+  animation:spin .8s linear infinite;
+}
+
+.btn.loading .spinner{
+  display:inline-block;
 }
 
 h2{
@@ -337,6 +360,10 @@ h2{
   display:block;
 }
 
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
 @media (max-width:600px){
   .hero h1{font-size:34px}
   .form-wrap{padding:22px}
@@ -440,7 +467,11 @@ h2{
         <textarea id="detalle" name="detalle" placeholder="Indique cantidades, tipo de producto o requerimientos específicos" required></textarea>
       </div>
 
-      <button type="submit" class="btn">Enviar solicitud</button>
+      <button type="submit" class="btn" id="submit-btn">
+        <span class="spinner" aria-hidden="true"></span>
+        <span class="btn-text">Enviar solicitud</span>
+      </button>
+
       <p id="form-status" class="form-status" aria-live="polite"></p>
     </form>
   </div>
@@ -473,6 +504,12 @@ const header = document.querySelector('header');
 let lastScrollY = window.scrollY;
 const quoteForm = document.getElementById('quote-form');
 const formStatus = document.getElementById('form-status');
+const submitButton = document.getElementById('submit-btn');
+const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
+
+const STORAGE_KEY = 'exialsa_quote_form';
+const STORAGE_MAX_AGE = 12 * 60 * 60 * 1000;
+let statusTimer = null;
 
 window.addEventListener('scroll', () => {
   const currentScrollY = window.scrollY;
@@ -490,42 +527,175 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScrollY;
 });
 
+function saveFormDraft() {
+  if (!quoteForm) return;
+
+  const data = Object.fromEntries(new FormData(quoteForm).entries());
+  const payload = {
+    savedAt: Date.now(),
+    data
+  };
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function clearFormDraft() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+function clearStatusAfter(ms = 5000) {
+  if (!formStatus) return;
+  if (statusTimer) clearTimeout(statusTimer);
+
+  statusTimer = setTimeout(() => {
+    formStatus.textContent = '';
+    formStatus.classList.remove('error');
+  }, ms);
+}
+
+function showStatus(message, isError = false, autoClear = false) {
+  if (!formStatus) return;
+
+  if (statusTimer) {
+    clearTimeout(statusTimer);
+    statusTimer = null;
+  }
+
+  formStatus.textContent = message;
+  formStatus.classList.toggle('error', isError);
+  formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+  if (autoClear) {
+    clearStatusAfter(5000);
+  }
+}
+
+function restoreFormDraft() {
+  if (!quoteForm) return false;
+
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return false;
+
+  try {
+    const parsed = JSON.parse(saved);
+
+    if (!parsed.savedAt || !parsed.data) {
+      clearFormDraft();
+      return false;
+    }
+
+    const isExpired = Date.now() - parsed.savedAt > STORAGE_MAX_AGE;
+
+    if (isExpired) {
+      clearFormDraft();
+      return false;
+    }
+
+    let restored = false;
+
+    Object.entries(parsed.data).forEach(([key, value]) => {
+      const field = quoteForm.elements.namedItem(key);
+      if (field && value) {
+        field.value = value;
+        restored = true;
+      }
+    });
+
+    return restored;
+  } catch {
+    clearFormDraft();
+    return false;
+  }
+}
+
+function setButtonLoading(isLoading) {
+  if (!submitButton || !submitButtonText) return;
+
+  submitButton.disabled = isLoading;
+  submitButton.classList.toggle('loading', isLoading);
+  submitButtonText.textContent = isLoading ? 'Enviando...' : 'Enviar solicitud';
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 if (quoteForm) {
+  const draftRestored = restoreFormDraft();
+
+  if (draftRestored) {
+    showStatus('Se restauró el borrador guardado en las últimas 12 horas.', false, true);
+  }
+
+  quoteForm.addEventListener('input', saveFormDraft);
+  quoteForm.addEventListener('change', saveFormDraft);
+
   quoteForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const submitButton = quoteForm.querySelector('button[type="submit"]');
-    const formData = new FormData(quoteForm);
-    const payload = Object.fromEntries(formData.entries());
+    const payload = Object.fromEntries(new FormData(quoteForm).entries());
 
-    submitButton.disabled = true;
-    submitButton.textContent = 'Enviando...';
-    formStatus.textContent = 'Enviando su solicitud...';
-    formStatus.classList.remove('error');
+    setButtonLoading(true);
+    showStatus('Enviando su solicitud...', false);
 
     try {
-      const response = await fetch('/api/cotizacion', {
+      const response = await fetchWithTimeout('/api/cotizacion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
-      });
+      }, 15000);
 
-      const result = await response.json();
+      let result = {};
+      const responseType = response.headers.get('content-type') || '';
+
+      if (responseType.includes('application/json')) {
+        result = await response.json();
+      } else {
+        const rawText = await response.text();
+        throw new Error(rawText || 'El servidor devolvió una respuesta no válida.');
+      }
 
       if (!response.ok) {
         throw new Error(result.error || 'No se pudo enviar la solicitud.');
       }
 
       quoteForm.reset();
-      formStatus.textContent = 'Solicitud enviada correctamente. Le contactaremos pronto.';
+      clearFormDraft();
+      showStatus('Solicitud enviada correctamente. Le contactaremos pronto.', false);
     } catch (error) {
-      formStatus.textContent = error.message || 'Ocurrió un error al enviar la solicitud.';
-      formStatus.classList.add('error');
+      let message = 'Ocurrió un error al enviar la solicitud. Intente nuevamente.';
+
+      if (error.name === 'AbortError') {
+        message = 'La solicitud tardó demasiado. Revise su conexión e inténtelo nuevamente.';
+      } else if (error.message.includes('Failed to fetch')) {
+        message = 'No se pudo conectar con el servidor. Revise su internet e inténtelo nuevamente.';
+      } else if (error.message.includes('RESEND_API_KEY')) {
+        message = 'Falta una configuración interna del formulario. Intente más tarde.';
+      } else if (error.message.includes('RESEND_FROM_EMAIL')) {
+        message = 'El remitente del formulario no está configurado correctamente.';
+      } else if (error.message.includes('Complete todos los campos')) {
+        message = 'Por favor complete todos los campos obligatorios.';
+      } else if (error.message.includes('Formato de solicitud')) {
+        message = 'Hubo un problema al enviar el formulario. Intente nuevamente.';
+      } else if (error.message) {
+        message = error.message;
+      }
+
+      showStatus(message, true);
     } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = 'Enviar solicitud';
+      setButtonLoading(false);
     }
   });
 }
