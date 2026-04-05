@@ -13,13 +13,15 @@
 
 <style>
 :root{
-  --bg:#0b1220;
-  --bg-2:#0f172a;
-  --line:#1f2937;
-  --text:#e5e7eb;
-  --muted:#94a3b8;
+  --bg:#ffffff;
+  --bg-2:#f8fbff;
+  --line:#dbe4f0;
+  --text:#0f172a;
+  --muted:#475569;
   --primary:#dc2626;
-  --white:#f8fafc;
+  --blue:#0f4c81;
+  --blue-soft:#eaf3fb;
+  --white:#ffffff;
 }
 
 *{box-sizing:border-box}
@@ -27,43 +29,52 @@
 body{
   margin:0;
   font-family:'Inter',system-ui;
-  background:linear-gradient(180deg,#020617,#0b1220 30%,#0f172a 100%);
+  background:linear-gradient(180deg,#ffffff,#f8fbff 100%);
   color:var(--text);
 }
 
 .container{max-width:1100px;margin:auto;padding:24px}
 .section{padding:64px 0}
 
-/* HEADER */
 header{
   position:sticky;top:0;z-index:10;
-  background:rgba(2,6,23,.85);
+  background:rgba(255,255,255,.95);
   backdrop-filter:blur(6px);
   border-bottom:1px solid var(--line);
+  transition:transform .35s ease, box-shadow .3s ease, background-color .3s ease;
 }
 
 header .row{
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:center;align-items:center;
 }
 
 .logo img{
-  height:42px;
-  padding:6px 12px;
+  height:180px;
+  padding:16px 26px;
   background:white;
-  border-radius:6px;
+  border-radius:12px;
   object-fit:contain;
 }
 
-/* HERO */
+header.hidden{
+  transform:translateY(-100%);
+}
+
+header.scrolled{
+  box-shadow:0 12px 24px rgba(15,76,129,0.08);
+}
+
 .hero{
   text-align:center;
   padding:90px 20px;
+  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
 }
 
 .hero h1{
-  font-size:38px;
+  font-size:48px;
   margin-bottom:12px;
   line-height:1.2;
+  color:var(--blue);
 }
 
 .hero p{
@@ -71,7 +82,6 @@ header .row{
   font-size:17px;
 }
 
-/* BOTÓN */
 .btn{
   background:var(--primary);
   color:white;
@@ -82,14 +92,92 @@ header .row{
   margin-top:20px;
   font-weight:600;
   transition:0.2s;
+  box-shadow:0 10px 24px rgba(220,38,38,0.18);
 }
 
 .btn:hover{
   transform:translateY(-2px);
-  box-shadow:0 8px 20px rgba(220,38,38,0.3);
+  background:#b91c1c;
+  box-shadow:0 12px 24px rgba(220,38,38,0.28);
 }
 
-/* CARDS */
+h2{
+  color:var(--blue);
+}
+
+.section-heading{
+  text-align:center;
+}
+
+.form-wrap{
+  max-width:760px;
+  margin:0 auto;
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:32px;
+  box-shadow:0 18px 40px rgba(15,76,129,0.08);
+}
+
+.form-intro{
+  margin-top:0;
+  margin-bottom:22px;
+  color:var(--muted);
+}
+
+.quote-form{
+  display:grid;
+  gap:16px;
+}
+
+.form-status{
+  min-height:24px;
+  margin:4px 0 0;
+  font-weight:600;
+  color:var(--blue);
+}
+
+.form-status.error{
+  color:var(--primary);
+}
+
+.field{
+  display:grid;
+  gap:8px;
+  text-align:left;
+}
+
+.field label{
+  font-weight:600;
+  color:var(--blue);
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  padding:14px 16px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font:inherit;
+  color:var(--text);
+  background:#fff;
+  outline:none;
+  transition:border-color .2s ease, box-shadow .2s ease;
+}
+
+.field textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 4px rgba(15,76,129,0.12);
+}
+
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -97,37 +185,71 @@ header .row{
 }
 
 .card{
-  background:#020617;
+  background:var(--white);
   border:1px solid var(--line);
-  padding:24px;
-  border-radius:12px;
+  padding:28px;
+  border-radius:18px;
   transition:0.25s;
+  box-shadow:0 12px 30px rgba(15,76,129,0.08);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:260px;
 }
 
 .card:hover{
-  border-color:var(--primary);
+  border-color:var(--blue);
   transform:translateY(-4px);
 }
 
 .card h3{
-  color:var(--primary);
-  margin-bottom:8px;
+  color:var(--blue);
+  margin:0 0 14px;
+  font-size:1.5rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
 }
 
-/* LISTAS */
+.card p{
+  color:var(--muted);
+  margin:0 0 24px;
+  font-size:1.05rem;
+  line-height:1.6;
+}
+
+.card-copy{
+  display:grid;
+  gap:10px;
+}
+
+.card-tag{
+  color:var(--primary);
+  font-size:.85rem;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+
+.card .btn{
+  margin-top:auto;
+  align-self:flex-start;
+}
+
 .list{
   max-width:600px;
   margin:auto;
   color:var(--muted);
+  background:var(--blue-soft);
+  border:1px solid #cfe0f2;
+  border-radius:12px;
+  padding:24px 28px;
 }
 
 .list li{
   margin-bottom:10px;
 }
 
-/* CONTACTO */
 #contacto a{
-  color:var(--white);
+  color:var(--text);
   text-decoration:none;
 }
 
@@ -135,39 +257,104 @@ header .row{
   color:var(--primary);
 }
 
-/* FOOTER */
+#contacto strong{
+  color:#ffffff;
+}
+
+.contact-section{
+  max-width:760px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:36px 40px;
+  box-shadow:0 20px 45px rgba(15,76,129,0.12);
+}
+
+.contact-section h2{
+  margin:0 0 18px;
+  color:var(--blue);
+  font-size:2rem;
+  letter-spacing:.02em;
+  text-transform:uppercase;
+}
+
+.contact-divider{
+  width:100%;
+  max-width:260px;
+  height:2px;
+  background:var(--primary);
+  margin-bottom:20px;
+}
+
+.contact-lines{
+  display:grid;
+  gap:12px;
+}
+
+.contact-line{
+  color:var(--text);
+  font-size:1.08rem;
+  line-height:1.6;
+}
+
+.contact-line span{
+  display:inline-block;
+  min-width:34px;
+  font-weight:700;
+  color:var(--blue);
+}
+
 .footer{
   border-top:1px solid var(--line);
   text-align:center;
   padding:30px;
   color:var(--muted);
+  background:#f8fafc;
 }
 
-/* WHATSAPP */
 .whatsapp{
   position:fixed;
   bottom:20px;
   right:20px;
   background:#25D366;
   color:white;
-  padding:12px 16px;
-  border-radius:50px;
+  width:62px;
+  height:62px;
+  border-radius:50%;
   text-decoration:none;
-  font-weight:600;
   display:flex;
   align-items:center;
-  gap:8px;
-  box-shadow:0 6px 18px rgba(0,0,0,0.3);
-  transition:0.2s;
+  justify-content:center;
+  box-shadow:0 10px 24px rgba(37,211,102,0.22);
+  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 
 .whatsapp:hover{
-  transform:scale(1.05);
+  transform:scale(1.08);
+  box-shadow:0 14px 28px rgba(37,211,102,0.3);
 }
 
-/* RESPONSIVE */
+.whatsapp svg{
+  width:32px;
+  height:32px;
+  display:block;
+}
+
 @media (max-width:600px){
-  .hero h1{font-size:30px}
+  .hero h1{font-size:34px}
+  .form-wrap{padding:22px}
+  .contact-section{
+    padding:28px 24px;
+  }
+  .contact-section h2{
+    font-size:1.6rem;
+  }
+  .logo img{
+    height:132px;
+    padding:10px 14px;
+  }
 }
 </style>
 </head>
@@ -179,75 +366,179 @@ header .row{
     <div class="logo">
       <img src="exialsa.png" alt="EXIALSA">
     </div>
-    <a href="https://wa.me/50582194885" class="btn">Cotizar</a>
   </div>
 </header>
 
 <section class="hero">
-  <h1>Cotice soluciones industriales con EXIALSA</h1>
-  <p>Extintores, alcoholes y llantas para empresas en Nicaragua.</p>
-  <a href="https://wa.me/50582194885" class="btn">Solicitar cotización</a>
+  <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
+  <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
 </section>
 
 <section class="section container">
-  <h2>Cotice con nosotros</h2>
+  <h2 class="section-heading">Gestionamos su cotización con proveedores confiables</h2>
 
   <div class="cards">
     <div class="card">
-      <h3>Extintores</h3>
-      <p>Venta, recarga e inspección técnica conforme a normativa.</p>
+      <div class="card-copy">
+        <span class="card-tag">Proteja sus espacios hoy</span>
+        <h3>EXTINTORES</h3>
+        <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
+      </div>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
-      <h3>Alcoholes</h3>
-      <p>Suministro industrial y comercial según requerimientos.</p>
+      <div class="card-copy">
+        <span class="card-tag">Abastézcase con confianza</span>
+        <h3>ALCOHOLES</h3>
+        <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
+      </div>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
-      <h3>Llantas</h3>
-      <p>Venta basado en su solicitud.</p>
+      <div class="card-copy">
+        <span class="card-tag">Encuentre la medida ideal</span>
+        <h3>LLANTAS</h3>
+        <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
+      </div>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
   </div>
 </section>
 
-<section class="section container">
-  <h2>¿Por qué EXIALSA?</h2>
-  <ul class="list">
-    <li>✔ Atención directa y rápida</li>
-    <li>✔ Cotizaciones personalizadas</li>
-    <li>✔ Enfoque empresarial</li>
-  </ul>
-</section>
+<section id="formulario-cotizacion" class="section container">
+  <div class="form-wrap">
+    <h2>Formulario de cotización</h2>
+    <p class="form-intro">Complete sus datos y cuéntenos qué necesita. Le contactaremos a la brevedad.</p>
 
-<section class="section container">
-  <h2>Proceso de cotización</h2>
-  <ul class="list">
-    <li>1. Contacto vía WhatsApp</li>
-    <li>2. Levantamiento de requerimiento</li>
-    <li>3. Envío de cotización</li>
-  </ul>
+    <form class="quote-form" id="quote-form">
+      <div class="field">
+        <label for="nombre">Nombre completo</label>
+        <input id="nombre" name="nombre" type="text" placeholder="Escriba su nombre" required>
+      </div>
+
+      <div class="field">
+        <label for="empresa">Empresa (opcional, si aplica)</label>
+        <input id="empresa" name="empresa" type="text" placeholder="Nombre del negocio o institución">
+      </div>
+
+      <div class="field">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="tel" placeholder="Ej. +505 8219 4885" required>
+      </div>
+
+      <div class="field">
+        <label for="correo">Correo electrónico</label>
+        <input id="correo" name="correo" type="email" placeholder="correo@ejemplo.com" required>
+      </div>
+
+      <div class="field">
+        <label for="producto">Producto de interés</label>
+        <select id="producto" name="producto" required>
+          <option value="">Seleccione una opción</option>
+          <option value="Extintores">Extintores</option>
+          <option value="Alcoholes">Alcoholes</option>
+          <option value="Llantas">Llantas</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="detalle">Detalle de la solicitud</label>
+        <textarea id="detalle" name="detalle" placeholder="Indique cantidades, tipo de producto o requerimientos específicos" required></textarea>
+      </div>
+
+      <button type="submit" class="btn">Enviar solicitud</button>
+      <p id="form-status" class="form-status" aria-live="polite"></p>
+    </form>
+  </div>
 </section>
 
 <section id="contacto" class="section container">
-  <h2>Contacto</h2>
-  <ul class="list">
-    <li><strong>Email:</strong> <a href="mailto:denis@sunsin.online">denis@sunsin.online</a></li>
-    <li><strong>Tel:</strong> <a href="tel:+50582194885">+505 8219 4885</a></li>
-    <li><strong>Tel:</strong> <a href="tel:+50587910837">+505 8791 0837</a></li>
-  </ul>
+  <div class="contact-section">
+    <h2>Contacto</h2>
+    <div class="contact-divider"></div>
+
+    <div class="contact-lines">
+      <div class="contact-line"><span>T:</span><a href="tel:+50582194885">+505 8219 4885</a></div>
+      <div class="contact-line"><span>T:</span><a href="tel:+50587910837">+505 8791 0837</a></div>
+    </div>
+  </div>
 </section>
 
 <footer class="footer">
   <p>EXIALSA | Managua, Nicaragua</p>
 </footer>
 
-<!-- BOTÓN WHATSAPP CON ICONO -->
 <a href="https://wa.me/50582194885" class="whatsapp">
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 24 24">
-    <path d="M20.52 3.48A11.86 11.86 0 0012.01 0C5.38 0 .01 5.37.01 12c0 2.12.55 4.19 1.6 6.02L0 24l6.19-1.62A11.94 11.94 0 0012.01 24c6.63 0 12-5.37 12-12 0-3.2-1.25-6.2-3.49-8.52z"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path fill="#fff" d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
   </svg>
-  WhatsApp
 </a>
+
+<script>
+const header = document.querySelector('header');
+let lastScrollY = window.scrollY;
+const quoteForm = document.getElementById('quote-form');
+const formStatus = document.getElementById('form-status');
+
+window.addEventListener('scroll', () => {
+  const currentScrollY = window.scrollY;
+
+  header.classList.toggle('scrolled', currentScrollY > 12);
+
+  if (currentScrollY <= 20) {
+    header.classList.remove('hidden');
+  } else if (currentScrollY > lastScrollY) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+
+  lastScrollY = currentScrollY;
+});
+
+if (quoteForm) {
+  quoteForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const submitButton = quoteForm.querySelector('button[type="submit"]');
+    const formData = new FormData(quoteForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
+    formStatus.textContent = 'Enviando su solicitud...';
+    formStatus.classList.remove('error');
+
+    try {
+      const response = await fetch('/api/cotizacion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'No se pudo enviar la solicitud.');
+      }
+
+      quoteForm.reset();
+      formStatus.textContent = 'Solicitud enviada correctamente. Le contactaremos pronto.';
+    } catch (error) {
+      formStatus.textContent = error.message || 'Ocurrió un error al enviar la solicitud.';
+      formStatus.classList.add('error');
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = 'Enviar solicitud';
+    }
+  });
+}
+</script>
 
 </body>
 </html>
