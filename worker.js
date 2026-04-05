@@ -1,766 +1,189 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+const RECIPIENTS = [
+  'denis@sunsin.online',
+  'aracely@rosalesmarenco.online'
+];
 
-<title>EXIALSA</title>
-<meta name="description" content="Cotizamos extintores, alcoholes y llantas con atención rápida y soluciones confiables.">
-
-<link rel="icon" href="exialsafavicon.png" type="image/png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg:#ffffff;
-  --bg-2:#f8fbff;
-  --line:#dbe4f0;
-  --text:#0f172a;
-  --muted:#475569;
-  --primary:#dc2626;
-  --blue:#0f4c81;
-  --blue-soft:#eaf3fb;
-  --white:#ffffff;
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type'
+    }
+  });
 }
 
-*{box-sizing:border-box}
-
-html{
-  scroll-behavior:smooth;
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
-body{
-  margin:0;
-  font-family:'Inter',system-ui,sans-serif;
-  background:linear-gradient(180deg,#ffffff,#f8fbff 100%);
-  color:var(--text);
+function maskEmail(email = '') {
+  const [user = '', domain = ''] = String(email).split('@');
+  if (!user || !domain) return 'destinatario';
+  return `${user.slice(0, 2)}***@${domain}`;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:24px;
-}
-
-.section{
-  padding:64px 0;
-}
-
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:rgba(255,255,255,.95);
-  backdrop-filter:blur(6px);
-  border-bottom:1px solid var(--line);
-  transition:transform .35s ease, box-shadow .3s ease, background-color .3s ease;
-}
-
-header.hidden{
-  transform:translateY(-100%);
-}
-
-header.scrolled{
-  box-shadow:0 12px 24px rgba(15,76,129,0.08);
-}
-
-header .row{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.logo img{
-  height:180px;
-  padding:16px 26px;
-  background:white;
-  border-radius:12px;
-  object-fit:contain;
-}
-
-.hero{
-  text-align:center;
-  padding:90px 20px;
-  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
-}
-
-.hero h1{
-  font-size:48px;
-  margin:0 0 16px;
-  line-height:1.2;
-  color:var(--blue);
-  font-weight:800;
-}
-
-.btn{
-  background:var(--primary);
-  color:white;
-  padding:14px 22px;
-  border-radius:8px;
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-  margin-top:20px;
-  font-weight:600;
-  transition:.2s;
-  box-shadow:0 10px 24px rgba(220,38,38,0.18);
-  border:none;
-  cursor:pointer;
-  font:inherit;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  background:#b91c1c;
-  box-shadow:0 12px 24px rgba(220,38,38,0.28);
-}
-
-.btn:disabled{
-  opacity:.92;
-  cursor:not-allowed;
-  transform:none;
-}
-
-.btn .spinner{
-  width:16px;
-  height:16px;
-  border:2px solid rgba(255,255,255,.45);
-  border-top-color:#ffffff;
-  border-radius:50%;
-  display:none;
-  animation:spin .8s linear infinite;
-}
-
-.btn.loading .spinner{
-  display:inline-block;
-}
-
-h2{
-  color:var(--blue);
-}
-
-.section-heading{
-  text-align:center;
-}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:20px;
-}
-
-.card{
-  background:var(--white);
-  border:1px solid var(--line);
-  padding:28px;
-  border-radius:18px;
-  transition:.25s;
-  box-shadow:0 12px 30px rgba(15,76,129,0.08);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  min-height:260px;
-}
-
-.card:hover{
-  border-color:var(--blue);
-  transform:translateY(-4px);
-}
-
-.card-copy{
-  display:grid;
-  gap:10px;
-}
-
-.card-tag{
-  color:var(--primary);
-  font-size:.85rem;
-  font-weight:700;
-  letter-spacing:.02em;
-}
-
-.card h3{
-  color:var(--blue);
-  margin:0 0 14px;
-  font-size:1.5rem;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-
-.card p{
-  color:var(--muted);
-  margin:0 0 24px;
-  font-size:1.05rem;
-  line-height:1.6;
-}
-
-.card .btn{
-  margin-top:auto;
-  align-self:flex-start;
-}
-
-.form-wrap{
-  max-width:760px;
-  margin:0 auto;
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:32px;
-  box-shadow:0 18px 40px rgba(15,76,129,0.08);
-}
-
-.reveal{
-  opacity:0;
-  transform:translateY(28px);
-  transition:opacity .7s ease, transform .7s ease;
-}
-
-.reveal.is-visible{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.form-intro{
-  margin-top:0;
-  margin-bottom:22px;
-  color:var(--muted);
-}
-
-.quote-form{
-  display:grid;
-  gap:16px;
-}
-
-.field{
-  display:grid;
-  gap:8px;
-  text-align:left;
-}
-
-.field label{
-  font-weight:600;
-  color:var(--blue);
-}
-
-.field input,
-.field textarea,
-.field select{
-  width:100%;
-  padding:14px 16px;
-  border:1px solid #cbd5e1;
-  border-radius:12px;
-  font:inherit;
-  color:var(--text);
-  background:#fff;
-  outline:none;
-  transition:border-color .2s ease, box-shadow .2s ease;
-}
-
-.field textarea{
-  min-height:140px;
-  resize:vertical;
-}
-
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-  border-color:var(--blue);
-  box-shadow:0 0 0 4px rgba(15,76,129,0.12);
-}
-
-.form-status{
-  min-height:24px;
-  margin:4px 0 0;
-  font-weight:600;
-  color:var(--blue);
-}
-
-.form-status.error{
-  color:var(--primary);
-}
-
-.contact-section{
-  max-width:760px;
-  margin:0 auto;
-  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
-  color:var(--text);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:36px 40px;
-  box-shadow:0 20px 45px rgba(15,76,129,0.12);
-}
-
-.contact-section h2{
-  margin:0 0 18px;
-  color:var(--blue);
-  font-size:2rem;
-  letter-spacing:.02em;
-  text-transform:uppercase;
-}
-
-.contact-divider{
-  width:100%;
-  max-width:260px;
-  height:2px;
-  background:var(--primary);
-  margin-bottom:20px;
-}
-
-.contact-lines{
-  display:grid;
-  gap:12px;
-}
-
-.contact-line{
-  color:var(--text);
-  font-size:1.08rem;
-  line-height:1.6;
-}
-
-.contact-line span{
-  display:inline-block;
-  min-width:34px;
-  font-weight:700;
-  color:var(--blue);
-}
-
-#contacto a{
-  color:var(--text);
-  text-decoration:none;
-}
-
-#contacto a:hover{
-  color:var(--primary);
-}
-
-.footer{
-  border-top:1px solid var(--line);
-  text-align:center;
-  padding:30px;
-  color:var(--muted);
-  background:#f8fafc;
-}
-
-.whatsapp-wrap{
-  position:fixed;
-  right:20px;
-  bottom:20px;
-  z-index:20;
-}
-
-.whatsapp{
-  background:#25D366;
-  color:white;
-  width:62px;
-  height:62px;
-  border-radius:50%;
-  text-decoration:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  box-shadow:
-    0 12px 28px rgba(37,211,102,0.24),
-    0 4px 10px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.35);
-  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
-  animation:floatWhatsapp 4.8s ease-in-out infinite;
-}
-
-.whatsapp:hover{
-  transform:scale(1.08);
-  box-shadow:0 14px 28px rgba(37,211,102,0.3);
-}
-
-.whatsapp svg{
-  width:32px;
-  height:32px;
-  display:block;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-@keyframes floatWhatsapp{
-  0%, 100%{
-    transform:translateY(0);
-    box-shadow:
-      0 12px 28px rgba(37,211,102,0.24),
-      0 4px 10px rgba(15,23,42,0.10),
-      inset 0 1px 0 rgba(255,255,255,0.35);
-  }
-  50%{
-    transform:translateY(-5px);
-    box-shadow:
-      0 18px 34px rgba(37,211,102,0.28),
-      0 8px 16px rgba(15,23,42,0.12),
-      inset 0 1px 0 rgba(255,255,255,0.38);
-  }
-}
-
-@media (max-width:600px){
-  .hero h1{font-size:34px}
-  .form-wrap{padding:22px}
-  .contact-section{padding:28px 24px}
-  .contact-section h2{font-size:1.6rem}
-  .logo img{
-    height:132px;
-    padding:10px 14px;
-  }
-  .whatsapp-wrap{
-    bottom:16px;
-    right:16px;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <div class="container row">
-    <div class="logo">
-      <img src="exialsa.png" alt="EXIALSA">
+function buildMessage({ nombre, empresa, telefono, correo, producto, detalle }) {
+  const subject = `Nueva solicitud de cotizacion - ${producto}`;
+  const html = `
+    <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a;">
+      <h2 style="color:#0f4c81;">Nueva solicitud de cotizacion</h2>
+      <p><strong>Nombre:</strong> ${escapeHtml(nombre)}</p>
+      <p><strong>Empresa:</strong> ${escapeHtml(empresa || 'No aplica')}</p>
+      <p><strong>Telefono:</strong> ${escapeHtml(telefono)}</p>
+      <p><strong>Correo electronico:</strong> ${escapeHtml(correo)}</p>
+      <p><strong>Producto de interes:</strong> ${escapeHtml(producto)}</p>
+      <p><strong>Detalle de la solicitud:</strong></p>
+      <p>${escapeHtml(detalle).replace(/\n/g, '<br>')}</p>
     </div>
-  </div>
-</header>
+  `;
 
-<section class="hero">
-  <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
-  <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
-</section>
+  const text = [
+    'Nueva solicitud de cotizacion',
+    `Nombre: ${nombre}`,
+    `Empresa: ${empresa || 'No aplica'}`,
+    `Telefono: ${telefono}`,
+    `Correo electronico: ${correo}`,
+    `Producto de interes: ${producto}`,
+    'Detalle de la solicitud:',
+    detalle
+  ].join('\n');
 
-<section class="section container">
-  <h2 class="section-heading">Gestionamos su cotización con proveedores confiables</h2>
-
-  <div class="cards">
-    <div class="card">
-      <div class="card-copy">
-        <span class="card-tag">Proteja sus espacios hoy</span>
-        <h3>EXTINTORES</h3>
-        <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
-      </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
-    </div>
-
-    <div class="card">
-      <div class="card-copy">
-        <span class="card-tag">Abastézcase con confianza</span>
-        <h3>ALCOHOLES</h3>
-        <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
-      </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
-    </div>
-
-    <div class="card">
-      <div class="card-copy">
-        <span class="card-tag">Encuentre la medida ideal</span>
-        <h3>LLANTAS</h3>
-        <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
-      </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
-    </div>
-  </div>
-</section>
-
-<section id="formulario-cotizacion" class="section container">
-  <div class="form-wrap reveal" id="quote-form-wrap">
-    <h2>Formulario de cotización</h2>
-    <p class="form-intro">Complete sus datos y cuéntenos qué necesita. Le contactaremos a la brevedad.</p>
-
-    <form class="quote-form" id="quote-form">
-      <div class="field">
-        <label for="nombre">Nombre completo</label>
-        <input id="nombre" name="nombre" type="text" placeholder="Escriba su nombre" required>
-      </div>
-
-      <div class="field">
-        <label for="empresa">Empresa (opcional, si aplica)</label>
-        <input id="empresa" name="empresa" type="text" placeholder="Nombre del negocio o institución">
-      </div>
-
-      <div class="field">
-        <label for="telefono">Teléfono</label>
-        <input id="telefono" name="telefono" type="tel" placeholder="Ej. +505 8219 4885" required>
-      </div>
-
-      <div class="field">
-        <label for="correo">Correo electrónico</label>
-        <input id="correo" name="correo" type="email" placeholder="correo@ejemplo.com" required>
-      </div>
-
-      <div class="field">
-        <label for="producto">Producto de interés</label>
-        <select id="producto" name="producto" required>
-          <option value="">Seleccione una opción</option>
-          <option value="Extintores">Extintores</option>
-          <option value="Alcoholes">Alcoholes</option>
-          <option value="Llantas">Llantas</option>
-          <option value="Otro">Otro</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label for="detalle">Detalle de la solicitud</label>
-        <textarea id="detalle" name="detalle" placeholder="Indique cantidades, tipo de producto o requerimientos específicos" required></textarea>
-      </div>
-
-      <button type="submit" class="btn" id="submit-btn">
-        <span class="spinner" aria-hidden="true"></span>
-        <span class="btn-text">Enviar solicitud</span>
-      </button>
-
-      <p id="form-status" class="form-status" aria-live="polite"></p>
-    </form>
-  </div>
-</section>
-
-<section id="contacto" class="section container">
-  <div class="contact-section">
-    <h2>Contacto</h2>
-    <div class="contact-divider"></div>
-
-    <div class="contact-lines">
-      <div class="contact-line"><span>T:</span><a href="tel:+50582194885">+505 8219 4885</a></div>
-      <div class="contact-line"><span>T:</span><a href="tel:+50587910837">+505 8791 0837</a></div>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
-  <p>EXIALSA</p>
-</footer>
-
-<div class="whatsapp-wrap">
-  <button type="button" class="whatsapp" id="whatsapp-button" aria-label="WhatsApp">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path fill="#fff" d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
-    </svg>
-  </button>
-</div>
-
-<script>
-const header = document.querySelector('header');
-let lastScrollY = window.scrollY;
-const quoteForm = document.getElementById('quote-form');
-const formStatus = document.getElementById('form-status');
-const submitButton = document.getElementById('submit-btn');
-const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
-const quoteFormWrap = document.getElementById('quote-form-wrap');
-const whatsappButton = document.getElementById('whatsapp-button');
-const WHATSAPP_URL = 'https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar';
-
-const STORAGE_KEY = 'exialsa_quote_form';
-const STORAGE_MAX_AGE = 12 * 60 * 60 * 1000;
-let statusTimer = null;
-
-window.addEventListener('scroll', () => {
-  const currentScrollY = window.scrollY;
-
-  header.classList.toggle('scrolled', currentScrollY > 12);
-
-  if (currentScrollY <= 20) {
-    header.classList.remove('hidden');
-  } else if (currentScrollY > lastScrollY) {
-    header.classList.add('hidden');
-  } else {
-    header.classList.remove('hidden');
-  }
-
-  lastScrollY = currentScrollY;
-});
-
-function saveFormDraft() {
-  if (!quoteForm) return;
-
-  const data = Object.fromEntries(new FormData(quoteForm).entries());
-  const payload = {
-    savedAt: Date.now(),
-    data
-  };
-
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+  return { subject, html, text };
 }
 
-function clearFormDraft() {
-  localStorage.removeItem(STORAGE_KEY);
-}
+async function sendToRecipient(env, recipient, replyTo, message) {
+  const resendResponse = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+      'User-Agent': 'exialsa-web/1.0'
+    },
+    body: JSON.stringify({
+      from: env.RESEND_FROM_EMAIL,
+      to: [recipient],
+      reply_to: replyTo,
+      subject: message.subject,
+      html: message.html,
+      text: message.text
+    })
+  });
 
-function clearStatusAfter(ms = 5000) {
-  if (!formStatus) return;
-  if (statusTimer) clearTimeout(statusTimer);
-
-  statusTimer = setTimeout(() => {
-    formStatus.textContent = '';
-    formStatus.classList.remove('error');
-  }, ms);
-}
-
-function showStatus(message, isError = false, autoClear = false) {
-  if (!formStatus) return;
-
-  if (statusTimer) {
-    clearTimeout(statusTimer);
-    statusTimer = null;
-  }
-
-  formStatus.textContent = message;
-  formStatus.classList.toggle('error', isError);
-  formStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-  if (autoClear) {
-    clearStatusAfter(5000);
-  }
-}
-
-function restoreFormDraft() {
-  if (!quoteForm) return false;
-
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (!saved) return false;
+  const raw = await resendResponse.text();
+  let parsed;
 
   try {
-    const parsed = JSON.parse(saved);
-
-    if (!parsed.savedAt || !parsed.data) {
-      clearFormDraft();
-      return false;
-    }
-
-    const isExpired = Date.now() - parsed.savedAt > STORAGE_MAX_AGE;
-
-    if (isExpired) {
-      clearFormDraft();
-      return false;
-    }
-
-    let restored = false;
-
-    Object.entries(parsed.data).forEach(([key, value]) => {
-      const field = quoteForm.elements.namedItem(key);
-      if (field && value) {
-        field.value = value;
-        restored = true;
-      }
-    });
-
-    return restored;
+    parsed = JSON.parse(raw);
   } catch {
-    clearFormDraft();
-    return false;
+    parsed = raw;
   }
+
+  return {
+    recipient,
+    ok: resendResponse.ok,
+    status: resendResponse.status,
+    parsed
+  };
 }
 
-function setButtonLoading(isLoading) {
-  if (!submitButton || !submitButtonText) return;
+async function handleQuote(request, env) {
+  const contentType = request.headers.get('content-type') || '';
 
-  submitButton.disabled = isLoading;
-  submitButton.classList.toggle('loading', isLoading);
-  submitButtonText.textContent = isLoading ? 'Enviando...' : 'Enviar solicitud';
-}
+  if (!contentType.includes('application/json')) {
+    return json({ error: 'No se pudo procesar la solicitud.' }, 415);
+  }
 
-function initReveal(element) {
-  if (!element) return;
+  const body = await request.json();
+  const nombre = String(body.nombre || '').trim();
+  const empresa = String(body.empresa || '').trim();
+  const telefono = String(body.telefono || '').trim();
+  const correo = String(body.correo || '').trim();
+  const producto = String(body.producto || '').trim();
+  const detalle = String(body.detalle || '').trim();
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        element.classList.add('is-visible');
-      } else {
-        element.classList.remove('is-visible');
-      }
+  if (!nombre || !telefono || !correo || !producto || !detalle) {
+    return json({ error: 'Complete todos los campos obligatorios.' }, 400);
+  }
+
+  if (!env.RESEND_API_KEY || !env.RESEND_FROM_EMAIL) {
+    console.error('Missing email configuration', {
+      hasResendApiKey: Boolean(env.RESEND_API_KEY),
+      hasResendFromEmail: Boolean(env.RESEND_FROM_EMAIL)
     });
-  }, {
-    threshold:0.2
+    return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 500);
+  }
+
+  const message = buildMessage({
+    nombre,
+    empresa,
+    telefono,
+    correo,
+    producto,
+    detalle
   });
 
-  observer.observe(element);
-}
+  const results = await Promise.all(
+    RECIPIENTS.map((recipient) => sendToRecipient(env, recipient, correo, message))
+  );
 
-async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  const failed = results.filter((result) => !result.ok);
 
-  try {
-    return await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
+  if (failed.length > 0) {
+    console.error(
+      'Email delivery failure',
+      failed.map((result) => ({
+        recipient: maskEmail(result.recipient),
+        status: result.status,
+        response: result.parsed
+      }))
+    );
 
-if (quoteForm) {
-  initReveal(quoteFormWrap);
-
-  const draftRestored = restoreFormDraft();
-
-  if (draftRestored) {
-    showStatus('Se restauró el borrador guardado en las últimas 12 horas.', false, true);
+    return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 502);
   }
 
-  quoteForm.addEventListener('input', saveFormDraft);
-  quoteForm.addEventListener('change', saveFormDraft);
+  console.log(
+    'Email submission accepted',
+    results.map((result) => ({
+      recipient: maskEmail(result.recipient),
+      status: result.status
+    }))
+  );
 
-  quoteForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  return json({
+    ok: true,
+    message: 'Solicitud enviada correctamente.'
+  });
+}
 
-    const payload = Object.fromEntries(new FormData(quoteForm).entries());
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
 
-    setButtonLoading(true);
-    showStatus('Enviando su solicitud...', false);
-
-    try {
-      const response = await fetchWithTimeout('/api/cotizacion', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      }, 15000);
-
-      let result = {};
-      const responseType = response.headers.get('content-type') || '';
-
-      if (responseType.includes('application/json')) {
-        result = await response.json();
-      } else {
-        const rawText = await response.text();
-        throw new Error(rawText || 'El servidor devolvió una respuesta no válida.');
-      }
-
-      if (!response.ok) {
-        throw new Error(result.error || 'No se pudo enviar la solicitud.');
-      }
-
-      quoteForm.reset();
-      clearFormDraft();
-      showStatus('Solicitud enviada correctamente. Le contactaremos pronto.', false);
-    } catch (error) {
-      let message = 'No se pudo enviar la solicitud en este momento. Intente nuevamente o escríbanos por WhatsApp.';
-
-      if (error.name === 'AbortError') {
-        message = 'La solicitud tardó demasiado. Revise su conexión e inténtelo nuevamente.';
-      } else if (error.message.includes('Failed to fetch')) {
-        message = 'No se pudo conectar con el servidor. Revise su internet e inténtelo nuevamente.';
-      }
-
-      showStatus(message, true);
-    } finally {
-      setButtonLoading(false);
+    if (request.method === 'OPTIONS' && url.pathname === '/api/cotizacion') {
+      return json({}, 204);
     }
-  });
-}
 
-if (whatsappButton) {
-  whatsappButton.addEventListener('click', () => {
-    window.location.href = WHATSAPP_URL;
-  });
-}
-</script>
+    if (request.method === 'POST' && url.pathname === '/api/cotizacion') {
+      try {
+        return await handleQuote(request, env);
+      } catch (error) {
+        console.error('Unexpected quote error', error);
+        return json({ error: 'No se pudo enviar la solicitud en este momento.' }, 500);
+      }
+    }
 
-</body>
-</html>
+    if (request.method === 'GET' && (url.pathname === '/cotizacion' || url.pathname === '/cotizacion/')) {
+      return Response.redirect(`${url.origin}/#formulario-cotizacion`, 302);
+    }
+
+    return env.ASSETS.fetch(request);
+  }
+};
