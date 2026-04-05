@@ -351,9 +351,7 @@ h2{
 }
 
 .whatsapp{
-  background:
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,0.24), transparent 34%),
-    linear-gradient(180deg, #39e27a 0%, #25D366 65%, #1fb958 100%);
+  background:#25D366;
   color:white;
   width:62px;
   height:62px;
@@ -362,23 +360,17 @@ h2{
   display:flex;
   align-items:center;
   justify-content:center;
-  border:1px solid rgba(255,255,255,0.42);
   box-shadow:
-    0 12px 26px rgba(37,211,102,0.18),
-    0 0 0 6px rgba(37,211,102,0.08),
+    0 12px 28px rgba(37,211,102,0.24),
+    0 4px 10px rgba(15,23,42,0.10),
     inset 0 1px 0 rgba(255,255,255,0.35);
-  backdrop-filter:blur(6px);
-  transition:transform .25s ease, box-shadow .25s ease, filter .25s ease;
-  animation:floatWhatsapp 5.8s ease-in-out infinite;
+  transition:transform .2s ease, box-shadow .2s ease, background-color .2s ease;
+  animation:floatWhatsapp 4.8s ease-in-out infinite;
 }
 
 .whatsapp:hover{
-  transform:translateY(-2px) scale(1.03);
-  box-shadow:
-    0 14px 28px rgba(37,211,102,0.22),
-    0 0 0 8px rgba(37,211,102,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.4);
-  filter:saturate(1.03);
+  transform:scale(1.08);
+  box-shadow:0 14px 28px rgba(37,211,102,0.3);
 }
 
 .whatsapp svg{
@@ -395,16 +387,16 @@ h2{
   0%, 100%{
     transform:translateY(0);
     box-shadow:
-      0 12px 26px rgba(37,211,102,0.18),
-      0 0 0 6px rgba(37,211,102,0.08),
+      0 12px 28px rgba(37,211,102,0.24),
+      0 4px 10px rgba(15,23,42,0.10),
       inset 0 1px 0 rgba(255,255,255,0.35);
   }
   50%{
-    transform:translateY(-3px);
+    transform:translateY(-5px);
     box-shadow:
-      0 16px 30px rgba(37,211,102,0.20),
-      0 0 0 8px rgba(37,211,102,0.10),
-      inset 0 1px 0 rgba(255,255,255,0.4);
+      0 18px 34px rgba(37,211,102,0.28),
+      0 8px 16px rgba(15,23,42,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.38);
   }
 }
 
@@ -437,7 +429,7 @@ h2{
 
 <section class="hero">
   <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
-  <a href="/cotizacion" class="btn">Solicitar cotización</a>
+  <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
 </section>
 
 <section class="section container">
@@ -450,7 +442,7 @@ h2{
         <h3>EXTINTORES</h3>
         <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
       </div>
-      <a href="/cotizacion" class="btn">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -459,7 +451,7 @@ h2{
         <h3>ALCOHOLES</h3>
         <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
       </div>
-      <a href="/cotizacion" class="btn">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -468,7 +460,7 @@ h2{
         <h3>LLANTAS</h3>
         <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
       </div>
-      <a href="/cotizacion" class="btn">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
     </div>
   </div>
 </section>
@@ -681,21 +673,10 @@ function initReveal(element) {
       }
     });
   }, {
-    threshold: 0.2
+    threshold:0.2
   });
 
   observer.observe(element);
-}
-
-function openQuoteSectionFromRoute() {
-  if (!quoteFormWrap) return;
-  if (window.location.pathname !== '/cotizacion') return;
-
-  quoteFormWrap.classList.add('is-visible');
-
-  window.requestAnimationFrame(() => {
-    quoteFormWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
 }
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
@@ -714,7 +695,6 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 
 if (quoteForm) {
   initReveal(quoteFormWrap);
-  openQuoteSectionFromRoute();
 
   const draftRestored = restoreFormDraft();
 
