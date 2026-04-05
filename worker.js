@@ -43,12 +43,14 @@ async function handleQuote(request, env) {
     return json({ error: 'Complete todos los campos obligatorios.' }, 400);
   }
 
-  if (!env.RESEND_API_KEY) {
-    return json({ error: 'Falta configurar RESEND_API_KEY en Cloudflare.' }, 500);
-  }
-
-  if (!env.RESEND_FROM_EMAIL) {
-    return json({ error: 'Falta configurar RESEND_FROM_EMAIL en Cloudflare.' }, 500);
+  if (!env.RESEND_API_KEY || !env.RESEND_FROM_EMAIL) {
+    return json({
+      error: 'Faltan variables en Cloudflare.',
+      debug: {
+        hasResendApiKey: Boolean(env.RESEND_API_KEY),
+        hasResendFromEmail: Boolean(env.RESEND_FROM_EMAIL)
+      }
+    }, 500);
   }
 
   const subject = `Nueva solicitud de cotizacion - ${producto}`;
@@ -97,11 +99,18 @@ async function handleQuote(request, env) {
 
       const responseText = await resendResponse.text();
 
+      let parsedResponse;
+      try {
+        parsedResponse = JSON.parse(responseText);
+      } catch {
+        parsedResponse = responseText;
+      }
+
       return {
         recipient,
         ok: resendResponse.ok,
         status: resendResponse.status,
-        response: responseText
+        response: parsedResponse
       };
     })
   );
