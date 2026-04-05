@@ -201,6 +201,209 @@ h2{
   align-self:flex-start;
 }
 
+.catalog-shell{
+  background:linear-gradient(180deg,#ffffff 0%,#eef6ff 100%);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:34px;
+  box-shadow:0 18px 42px rgba(15,76,129,0.10);
+  display:grid;
+  gap:28px;
+}
+
+.catalog-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.catalog-top h2{
+  margin:8px 0 10px;
+  font-size:2.1rem;
+}
+
+.catalog-intro{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:1.03rem;
+}
+
+.btn-secondary{
+  background:#ffffff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  box-shadow:0 8px 20px rgba(15,76,129,0.08);
+}
+
+.btn-secondary:hover{
+  background:#ffffff;
+  color:var(--blue);
+  box-shadow:0 12px 24px rgba(15,76,129,0.12);
+}
+
+.catalog-grid{
+  display:grid;
+  grid-template-columns:1.05fr 1fr;
+  gap:24px;
+  align-items:stretch;
+}
+
+.catalog-visual{
+  position:relative;
+  min-height:360px;
+  border-radius:22px;
+  overflow:hidden;
+  border:1px solid rgba(15,76,129,0.12);
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,255,255,0.58) 0, rgba(255,255,255,0.08) 22%, transparent 36%),
+    linear-gradient(160deg, #0f4c81 0%, #1d6aa7 45%, #eaf3fb 100%);
+}
+
+.catalog-glow{
+  position:absolute;
+  inset:auto -12% -25% auto;
+  width:240px;
+  height:240px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.16);
+  filter:blur(12px);
+}
+
+.catalog-bottle{
+  position:absolute;
+  bottom:62px;
+  border-radius:18px 18px 12px 12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.72), rgba(255,255,255,0.18));
+  border:1px solid rgba(255,255,255,0.42);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+.catalog-bottle::before{
+  content:"";
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:28px;
+  height:22px;
+  border-radius:8px 8px 4px 4px;
+  background:rgba(255,255,255,0.82);
+}
+
+.catalog-bottle::after{
+  content:"";
+  position:absolute;
+  left:18%;
+  right:18%;
+  bottom:12%;
+  height:48%;
+  border-radius:12px;
+  background:linear-gradient(180deg, rgba(57,226,122,0.72), rgba(37,211,102,0.34));
+}
+
+.bottle-one{
+  left:44px;
+  width:94px;
+  height:210px;
+}
+
+.bottle-two{
+  left:152px;
+  width:78px;
+  height:168px;
+}
+
+.bottle-three{
+  left:242px;
+  width:112px;
+  height:232px;
+}
+
+.catalog-badge{
+  position:absolute;
+  top:26px;
+  left:26px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.16);
+  color:#ffffff;
+  font-size:.88rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.24);
+}
+
+.catalog-badge::before{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#39e27a;
+  box-shadow:0 0 0 4px rgba(57,226,122,0.16);
+}
+
+.catalog-caption{
+  position:absolute;
+  left:26px;
+  right:26px;
+  bottom:22px;
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.14);
+  color:#ffffff;
+  line-height:1.6;
+  border:1px solid rgba(255,255,255,0.24);
+  backdrop-filter:blur(10px);
+}
+
+.catalog-copy{
+  display:grid;
+  gap:18px;
+}
+
+.catalog-group{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 10px 24px rgba(15,76,129,0.05);
+}
+
+.catalog-group h3{
+  margin:0 0 14px;
+  color:var(--blue);
+  font-size:1.05rem;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+
+.catalog-list{
+  margin:0;
+  padding-left:20px;
+  display:grid;
+  gap:12px;
+  color:var(--muted);
+  line-height:1.65;
+}
+
+.catalog-list strong{
+  color:var(--text);
+}
+
+.catalog-cta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+}
+
 .form-wrap{
   max-width:760px;
   margin:0 auto;
@@ -414,6 +617,13 @@ h2{
 
 @media (max-width:600px){
   .hero h1{font-size:34px}
+  .catalog-shell{padding:22px}
+  .catalog-top h2{font-size:1.7rem}
+  .catalog-grid{grid-template-columns:1fr}
+  .catalog-visual{min-height:300px}
+  .bottle-one{left:26px;width:80px;height:184px}
+  .bottle-two{left:116px;width:68px;height:146px}
+  .bottle-three{left:194px;width:96px;height:202px}
   .form-wrap{padding:22px}
   .contact-section{padding:28px 24px}
   .contact-section h2{font-size:1.6rem}
@@ -439,7 +649,7 @@ h2{
   </div>
 </header>
 
-<section class="hero">
+<section id="inicio" class="hero">
   <h1>Seguridad Contra Incendios y Suministros Industriales</h1>
   <a href="#formulario-cotizacion" class="btn">Solicitar cotización</a>
 </section>
@@ -454,7 +664,7 @@ h2{
         <h3>EXTINTORES</h3>
         <p>Venta, recarga e inspección técnica conforme a normativa, con atención enfocada en cada requerimiento.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn" data-product="Extintores">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -463,7 +673,7 @@ h2{
         <h3>ALCOHOLES</h3>
         <p>Suministro industrial y comercial según requerimientos, con opciones adaptadas al tipo de operación y volumen solicitado.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="#catalogo-alcoholes" class="btn" data-product="Alcoholes">Ver catálogo</a>
     </div>
 
     <div class="card">
@@ -472,7 +682,70 @@ h2{
         <h3>LLANTAS</h3>
         <p>Venta basada en su solicitud, considerando medida, aplicación y disponibilidad según su necesidad.</p>
       </div>
-      <a href="#formulario-cotizacion" class="btn">Ver catálogo</a>
+      <a href="#formulario-cotizacion" class="btn" data-product="Llantas">Ver catálogo</a>
+    </div>
+  </div>
+</section>
+
+<section id="catalogo-alcoholes" class="section container">
+  <div class="catalog-shell reveal" id="catalog-alcoholes-section">
+    <div class="catalog-top">
+      <div>
+        <span class="card-tag">Catálogo disponible</span>
+        <h2>ALCOHOLES</h2>
+        <p class="catalog-intro">
+          <strong style="color:var(--text);">DISTRIBUIDORA DE ALCOHOLES SUNSIN</strong><br>
+          Especialistas en suministro de alcoholes para uso industrial, sanitario y técnico. Ofrecemos productos en diferentes tipos y concentraciones, garantizando calidad, disponibilidad y adaptación a cada necesidad operativa.
+        </p>
+      </div>
+      <a href="#inicio" class="btn btn-secondary">Regresar al inicio</a>
+    </div>
+
+    <div class="catalog-grid">
+      <div class="catalog-visual" aria-hidden="true">
+        <div class="catalog-badge">Disponibilidad inmediata</div>
+        <div class="catalog-bottle bottle-one"></div>
+        <div class="catalog-bottle bottle-two"></div>
+        <div class="catalog-bottle bottle-three"></div>
+        <div class="catalog-glow"></div>
+        <div class="catalog-caption">
+          Presentaciones en <strong>litros, galones y barriles</strong>, según requerimiento operativo y volumen solicitado.
+        </div>
+      </div>
+
+      <div class="catalog-copy">
+        <div class="catalog-group">
+          <h3>Tipos disponibles</h3>
+          <ul class="catalog-list">
+            <li><strong>Alcohol Etílico (Etanol):</strong> Para desinfección de superficies y uso sanitario. Presentaciones en 70%, 90% y 96%.</li>
+            <li><strong>Alcohol Industrial:</strong> Uso en limpieza de equipos, maquinaria y procesos industriales.</li>
+            <li><strong>Alcohol Isopropílico (IPA):</strong> Alta pureza para limpieza electrónica y técnica, secado rápido sin residuos.</li>
+            <li><strong>Alcohol Birrectificado:</strong> Etanol de alta pureza para aplicaciones farmacéuticas, cosméticas y alimentarias.</li>
+            <li><strong>Alcohol Desnaturalizado:</strong> Uso industrial y de limpieza. No apto para consumo.</li>
+            <li><strong>Alcohol Amílico:</strong> Aplicaciones en laboratorio y procesos químicos específicos.</li>
+            <li><strong>Alcohol Orgánico:</strong> Alternativa de origen natural para procesos sostenibles.</li>
+          </ul>
+        </div>
+
+        <div class="catalog-group">
+          <h3>Presentaciones</h3>
+          <ul class="catalog-list">
+            <li>Litros, galones y barriles, según requerimiento.</li>
+          </ul>
+        </div>
+
+        <div class="catalog-group">
+          <h3>Aplicaciones</h3>
+          <ul class="catalog-list">
+            <li>Desinfección, mantenimiento, laboratorio, industria, cosmética y limpieza especializada.</li>
+          </ul>
+        </div>
+
+        <div class="catalog-cta">
+          <a href="#formulario-cotizacion" class="btn" data-product="Alcoholes">Solicitar cotización de alcoholes</a>
+          <a href="#contacto" class="btn btn-secondary">Hablar con asesor</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -555,7 +828,7 @@ h2{
             <path d="M19.05 4.94A9.85 9.85 0 0 0 12.03 2C6.5 2 2 6.5 2 12.03c0 1.77.46 3.5 1.34 5.03L2 22l5.08-1.33A10 10 0 0 0 12.03 22C17.56 22 22 17.5 22 11.97c0-2.66-1.04-5.17-2.95-7.03Zm-7.02 15.38a8.3 8.3 0 0 1-4.24-1.16l-.3-.18-3.02.79.81-2.94-.2-.31a8.28 8.28 0 0 1-1.28-4.49c0-4.56 3.7-8.27 8.26-8.27 2.21 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.44 5.8c0 4.56-3.71 8.27-8.31 8.27Zm4.53-6.2c-.25-.12-1.47-.72-1.7-.8-.23-.08-.39-.12-.56.12-.17.24-.65.8-.8.96-.15.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.22-1.45-1.36-1.69-.14-.24-.01-.37.1-.49.1-.1.25-.27.37-.41.12-.14.17-.24.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.84-.2-.48-.41-.42-.56-.42h-.48c-.17 0-.43.06-.66.31-.23.24-.88.86-.88 2.09 0 1.23.9 2.42 1.03 2.59.12.17 1.77 2.7 4.29 3.79.6.26 1.06.41 1.42.52.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.17.2-.57.2-1.06.14-1.17-.06-.1-.23-.17-.48-.29Z"/>
           </svg>
         </div>
-        <a href="https://wa.me/50587192461?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar" target="_blank" rel="noopener noreferrer">+505 8719 2461</a>
+        <a href="https://wa.me/50587910837?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar" target="_blank" rel="noopener noreferrer">+505 8791 0837</a>
       </div>
     </div>
   </div>
@@ -580,9 +853,12 @@ const quoteForm = document.getElementById('quote-form');
 const formStatus = document.getElementById('form-status');
 const submitButton = document.getElementById('submit-btn');
 const submitButtonText = submitButton ? submitButton.querySelector('.btn-text') : null;
+const productField = document.getElementById('producto');
 const quoteFormWrap = document.getElementById('quote-form-wrap');
+const alcoholCatalogSection = document.getElementById('catalogo-alcoholes-section');
 const contactSection = document.getElementById('contact-section');
 const whatsappButton = document.getElementById('whatsapp-button');
+const productLinks = document.querySelectorAll('[data-product]');
 const WHATSAPP_URL = 'https://wa.me/50582194885?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar';
 
 const STORAGE_KEY = 'exialsa_quote_form';
@@ -712,6 +988,11 @@ function initReveal(element) {
   observer.observe(element);
 }
 
+function preselectProduct(productName) {
+  if (!productField || !productName) return;
+  productField.value = productName;
+}
+
 async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -727,6 +1008,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 }
 
 if (quoteForm) {
+  initReveal(alcoholCatalogSection);
   initReveal(quoteFormWrap);
   initReveal(contactSection);
 
@@ -788,6 +1070,12 @@ if (quoteForm) {
     }
   });
 }
+
+productLinks.forEach((link) => {
+  link.addEventListener('click', () => {
+    preselectProduct(link.dataset.product);
+  });
+});
 
 if (whatsappButton) {
   whatsappButton.addEventListener('click', () => {
